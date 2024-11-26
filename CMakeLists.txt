@@ -8,7 +8,8 @@ set(CMAKE_CXX_FLAGS_DEBUG_INIT "-Wall")
 set(CMAKE_CXX_FLAGS_RELEASE_INIT "-Wall -Ofast")
 
 
-add_library(${project_name}-uci-lib-socks
+add_library(${project_name}
+            SHARED
             process/process.cpp
             process/process.hpp
             process/resource.cpp
@@ -24,13 +25,14 @@ add_library(${project_name}-uci-lib-socks
             uci/info.cpp
             uci/info.hpp
             )
+target_include_directories(${project_name} PUBLIC uci)
 
 
 add_executable(process test/process.cpp)
-target_link_libraries(process ${project_name}-uci-lib-socks )
+target_link_libraries(process ${project_name} )
 
 add_executable(pipe test/file.cpp)
-target_link_libraries(pipe ${project_name}-uci-lib-socks )
+target_link_libraries(pipe ${project_name} )
 
 add_executable(uci_test test/uci_test.cpp)
-target_link_libraries(uci_test ${project_name}-uci-lib-socks )
+target_link_libraries(uci_test ${project_name} )
