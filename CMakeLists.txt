@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-set(project_name ucichess-cpp) ## rename your project here
+set(project_name ucichess) ## rename your project here
 
 project(${project_name})
 set(CMAKE_CXX_STANDARD 23)
