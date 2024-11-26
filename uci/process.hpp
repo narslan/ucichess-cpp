@@ -43,8 +43,8 @@ namespace ucichess {
 
     int searchDepth;
     p m_child_process;
-    f m_pipe_write; // write part
-    f m_pipe_read; // read part
+    f m_pipe_write; // write part, todo, remove
+    f m_pipe_read; // read part, todo remove
     FILE* fromEngine;
     FILE* toEngine;
   };

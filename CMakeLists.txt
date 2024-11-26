@@ -9,7 +9,7 @@ set(CMAKE_CXX_FLAGS_RELEASE_INIT "-Wall -Ofast")
 
 
 add_library(${project_name}
-            SHARED
+            PUBLIC
             process/process.cpp
             process/process.hpp
             process/resource.cpp
