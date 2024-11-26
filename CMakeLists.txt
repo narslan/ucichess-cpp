@@ -1,12 +1,8 @@
 cmake_minimum_required(VERSION 3.20)
 
-set(project_name ucichess) ## rename your project here
+set(project_name ucichess) 
 
-project(${project_name})
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_FLAGS_DEBUG_INIT "-Wall")
-set(CMAKE_CXX_FLAGS_RELEASE_INIT "-Wall -Ofast")
-
+project(${project_name} VERSION 0.9 DESCRIPTION "UCI chess protocol adapter")
 
 add_library(${project_name}
             SHARED
@@ -25,7 +21,11 @@ add_library(${project_name}
             uci/info.cpp
             uci/info.hpp
             )
-target_include_directories(${project_name} PUBLIC uci)
+
+set_target_properties(${project_name} PROPERTIES VERSION ${PROJECT_VERSION})
+
+set_target_properties(${project_name} PROPERTIES PUBLIC_HEADER uci/process.hpp)
+
 
 
 add_executable(process test/process.cpp)
