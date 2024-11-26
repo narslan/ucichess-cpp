@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 
 set(project_name ucichess) 
 
-project(${project_name} VERSION 0.9.2 DESCRIPTION "UCI chess protocol adapter")
+project(${project_name} VERSION 0.9.3 DESCRIPTION "UCI chess protocol adapter")
 
 add_library(${project_name}
             SHARED
@@ -44,7 +44,7 @@ install(FILES ${CMAKE_BINARY_DIR}/${project_name}.pc DESTINATION ${CMAKE_INSTALL
 install(
     EXPORT ${project_name}
     NAMESPACE ${project_name}::
-    DESTINATION "${CMAKE_INSTALL_CMAKEDIR}"
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
     COMPONENT ${project_name}
 )
 
