@@ -3,7 +3,7 @@
 #include "process.hpp"
 #include <string>
 #include <vector>
-namespace uci {
+namespace ucichess {
 
   using StrArgs = std::vector<std::string>;
   struct command {
@@ -37,4 +37,4 @@ namespace uci {
   const std::string kEngineAuthorPrefix = "id author ";
   const std::string kOk = "uciok";
 
-} // namespace uci
+} // namespace ucichess

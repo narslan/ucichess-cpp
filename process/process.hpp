@@ -1,14 +1,12 @@
 #pragma once
 
-#include <fmt/core.h>
-
 #include "../error/error.hpp"
 #include <string>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <vector>
-namespace chessbird {
+namespace ucichess {
   class Process {
     protected:
     pid_t pid;
@@ -40,7 +38,6 @@ namespace chessbird {
     }
 
     static pid_t wait(int who) {
-      fmt::print("waiting child {} pid", who);
       return Process::waitpid(who);
     }
 
@@ -55,7 +52,7 @@ namespace chessbird {
         throw Error(errno, EC_RESOURCE);
       }
       catch(const std::exception& err) {
-        fmt::print("{}\n", err.what());
+        std::cout << err.what() << "\n";
       }
     }
 
@@ -68,7 +65,6 @@ namespace chessbird {
 
       for(size_t i = 0; i < s.size(); i++) {
         argv[i] = (char*)s[i].c_str();
-        fmt::print("{}: {}\n", i, argv[i]);
       }
 
       try {
@@ -76,7 +72,7 @@ namespace chessbird {
         throw Error(errno, EC_RESOURCE);
       }
       catch(const std::exception& err) {
-        fmt::print("{}\n", err.what());
+        std::cout << err.what() << "\n";
       }
     }
 
@@ -112,4 +108,4 @@ namespace chessbird {
     ~Process() = default;
   };
 
-} // namespace chessbird
+} // namespace ucichess

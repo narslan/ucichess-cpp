@@ -1,5 +1,4 @@
 #pragma once
-#include <fmt/core.h>
 
 static struct ec_node {
   struct ec_node* ec_next;
@@ -12,8 +11,8 @@ static void ec_push(const char* fcn, const char* file, int line, const char* str
   auto node = ec_node();
   node.ec_errno = errno_arg;
 
-  fmt::print("{} {} {} {} {} {} {} {}", errno_arg, fcn, "{", file, ":", line, "}", str);
+  //fmt::print("{} {} {} {} {} {} {} {}", errno_arg, fcn, "{", file, ":", line, "}", str);
 }
 
 ;
-// namespace chessbird
+// namespace ucichess

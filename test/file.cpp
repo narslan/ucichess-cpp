@@ -1,9 +1,9 @@
-#include "../src/process/file.hpp"
-#include "../src/error/error.hpp"
-#include "../src/process/process.hpp"
+#include "../process/file.hpp"
+#include "../error/error.hpp"
+#include "../process/process.hpp"
 
-using f = chessbird::File;
-using p = chessbird::Process;
+using f = ucichess::File;
+using p = ucichess::Process;
 void pipeRead() {
 
   f pfd[2];
@@ -17,8 +17,7 @@ void pipeRead() {
     printf("read %ld bytes: %s\n", (long)nread, s);
 }
 
-void read(chessbird::File pfd) {
-  fmt::print("we are in read");
+void read(ucichess::File pfd) {
   char s[10000];
   auto nread = pfd.read(s, sizeof(s));
   if(nread == 0) {
@@ -38,7 +37,7 @@ void pipeWrite() {
   p pid = p::fork();
   switch(pid) {
   case -1:
-    chessbird::Error(errno, EC_RESOURCE);
+    ucichess::Error(errno, EC_RESOURCE);
   case 0: // child.
 
     pfd[0].dup2(STDIN_FILENO);

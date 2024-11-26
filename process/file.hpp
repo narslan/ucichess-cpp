@@ -1,6 +1,6 @@
 #pragma once
 #include <cstdio>
-namespace chessbird {
+namespace ucichess {
   class File {
     public:
     ~File() = default;
@@ -36,4 +36,4 @@ namespace chessbird {
     ssize_t size;
   };
 
-} // namespace chessbird
+} // namespace ucichess

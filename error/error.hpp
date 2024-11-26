@@ -14,14 +14,10 @@ typedef enum {
 #define EC_CAUGHT(e) ec_push(__func__, __FILE__, __LINE__, "EC_CAUGHT", e.get_code());
 
 #define EC_EXIT(e)                                                                                 \
-  {                                                                                                \
-    fmt::print("{} {} {}", __func__, __FILE__, __LINE__);                                          \
-    ::exit(EXIT_FAILURE);                                                                          \
-  }
+  { ::exit(EXIT_FAILURE); }
 
 #define EC__EXIT(e)                                                                                \
   {                                                                                                \
-    fmt::print("{} {} {}", __func__, __FILE__, __LINE__);                                          \
     EC_FLUSH("EC__EXIT")                                                                           \
     ::_exit(EXIT_FAILURE);                                                                         \
   }
@@ -30,11 +26,11 @@ typedef enum {
   try {                                                                                            \
     s;                                                                                             \
   }                                                                                                \
-  catch(chessbird::Error e) {                                                                      \
+  catch(ucichess::Error e) {                                                                       \
     EC_EXIT(e)                                                                                     \
   }
 
-namespace chessbird {
+namespace ucichess {
 
   class Error : public std::exception {
     protected:
@@ -72,4 +68,4 @@ Operator to display Error.
   std::ostream& operator<<(std::ostream& s, const Error& e);
   //@}
 
-} // namespace chessbird
+} // namespace ucichess

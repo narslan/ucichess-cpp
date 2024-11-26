@@ -1,13 +1,12 @@
 #include "error.hpp"
-#include <fmt/core.h>
 #include <netdb.h>
 
-using namespace chessbird;
+using namespace ucichess;
 
 /**
 	Stream operator to output Error.
 */
-std::ostream& chessbird::operator<<(std::ostream& s, const Error& e) {
+std::ostream& ucichess::operator<<(std::ostream& s, const Error& e) {
   s << "[ERROR: " << e.what() << "]";
   return s;
 }

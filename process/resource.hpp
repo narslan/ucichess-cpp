@@ -2,7 +2,7 @@
 #include <memory>
 #include <sys/resource.h>
 
-namespace chessbird {
+namespace ucichess {
 
   using rp = std::unique_ptr<rusage>;
   class Resource {
@@ -10,4 +10,4 @@ namespace chessbird {
     static long memusage();
   };
 
-} // namespace chessbird
+} // namespace ucichess

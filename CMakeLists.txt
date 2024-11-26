@@ -8,7 +8,7 @@ set(CMAKE_CXX_FLAGS_DEBUG_INIT "-Wall")
 set(CMAKE_CXX_FLAGS_RELEASE_INIT "-Wall -Ofast")
 
 
-add_library(${project_name}-process-lib-socks
+add_library(${project_name}-uci-lib-socks
             process/process.cpp
             process/process.hpp
             process/resource.cpp
@@ -17,9 +17,6 @@ add_library(${project_name}-process-lib-socks
             process/file.hpp
             error/error.cpp
             error/error.hpp
-            )
-
-add_library(${project_name}-uci-lib-socks
             uci/command.cpp
             uci/command.hpp 
             uci/process.cpp

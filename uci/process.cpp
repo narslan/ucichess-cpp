@@ -1,12 +1,13 @@
 #include "process.hpp"
 #include "../error/error.hpp"
+#include <cstring>
 #include <fcntl.h>
-#include <fmt/core.h>
+
 #include <sstream>
 #include <string>
 #include <sys/types.h>
-#include <vector>
-namespace uci {
+
+namespace ucichess {
 
   // printf("read %ld bytes: %s\n", (long)nread, s);
 
@@ -21,7 +22,7 @@ namespace uci {
     p pid = p::fork();
     switch(pid) {
     case -1:
-      chessbird::Error(errno, EC_RESOURCE);
+      ucichess::Error(errno, EC_RESOURCE);
     case 0: // child.
 
       parentToChild[0].dup2(STDIN_FILENO);
@@ -42,10 +43,6 @@ namespace uci {
       m_pipe_read = childToParent[0];
       fromEngine = ::fdopen(childToParent[0].fd, "r");
       toEngine = ::fdopen(parentToChild[1].fd, "w");
-      //for emptying first stdout.
-
-      // int flags = sfd[0].fcntl(F_GETFL, 0);
-      // sfd[0].fcntl(F_SETFL, flags | O_NONBLOCK);
     }
   };
 
@@ -255,18 +252,13 @@ namespace uci {
       return false;
     }
     else if(waitForResponse("uciok")) {
-      // printf("hallo inside da loop");
-      // Set default options.
+
       // setOption("UCI_AnalyseMode", "true");
       // setOption("MultiPV", variations);
 
       // Set command-line options.
       setOptions(options);
 
-      // ASSERT_IS(checkIsReady() == true, "???");
-      //startNewGame();
-      // printf("hello there|");
-      // printf("%s", checkIsReady() ? "true\n" : "false\n");
       return checkIsReady();
     }
     else {
@@ -299,14 +291,6 @@ namespace uci {
       throw std::runtime_error("tokens doesnt have info");
     };
 
-    // for(auto& el : infoTokens) {
-    //   fmt::print("{}\n", el);
-    // }
-    // for(int i = 0; i < infoTokens.size(); i++) {
-    //     printf("token[%d]: %s", i, infoTokens[i].c_str());
-    // }
-    // ASSERT_IS("depth", infoTokens[1]);
-    // ASSERT_IS("score", infoTokens[6]);
     if((info.find("multipv ") != std::string::npos) || (info.find("nodes ") != std::string::npos)) {
       if((info.find("cp ") != std::string::npos)) {
         int numTokens = infoTokens.size();
@@ -317,7 +301,7 @@ namespace uci {
         if(t < numTokens) {
           int depth = std::stoi(infoTokens[t + 1]);
           if(depth == searchDepth) {
-            fmt::print("save eval\n");
+
             //Evaluation* ev = new Evaluation(infoTokens, info);
             //saveEvaluation(ev, info);
           }
@@ -389,4 +373,4 @@ namespace uci {
     return bestmove;
   }
 
-} // namespace uci
+} // namespace ucichess

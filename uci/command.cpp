@@ -1,6 +1,6 @@
 #include "command.hpp"
 
-namespace uci {
+namespace ucichess {
 
   void UCIQuit(ChessEngine& ce, const StrArgs args) {
 
@@ -13,7 +13,6 @@ namespace uci {
   };
   void UCIBest(ChessEngine& ce, const StrArgs args) {
     auto v = ce.bestMove();
-    fmt::print("best move: {}\n", v);
   };
 
   void UCIIsReady(ChessEngine& ce, const StrArgs args) {
@@ -22,4 +21,4 @@ namespace uci {
   void UCIPosition(ChessEngine& ce, const StrArgs args){};
   void UCISetOption(ChessEngine& ce, const StrArgs args){};
   void UCIStop(ChessEngine& ce, const StrArgs args){};
-} // namespace uci
+} // namespace ucichess

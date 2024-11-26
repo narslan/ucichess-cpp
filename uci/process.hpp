@@ -5,9 +5,9 @@
 #include <map>
 #include <string>
 
-namespace uci {
-  using f = chessbird::File;
-  using p = chessbird::Process;
+namespace ucichess {
+  using f = ucichess::File;
+  using p = ucichess::Process;
 
   class ChessEngine {
     public:
@@ -49,4 +49,4 @@ namespace uci {
     FILE* toEngine;
   };
 
-} // namespace uci
+} // namespace ucichess
