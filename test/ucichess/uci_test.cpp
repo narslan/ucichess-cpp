@@ -1,5 +1,5 @@
-#include "../uci/command.hpp"
-#include "../uci/process.hpp"
+#include "uci/command.hpp"
+#include "uci/process.hpp"
 #include <sstream>
 #include <vector>
 // split_s is the core machinery. It split s at splitPoint, and returns a vector.

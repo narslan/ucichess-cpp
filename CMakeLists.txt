@@ -6,27 +6,31 @@ project(${project_name} VERSION 0.9.3 DESCRIPTION "UCI chess protocol adapter")
 
 add_library(${project_name}
             SHARED
-            src/process/process.cpp
-            src/process/process.hpp
-            src/process/resource.cpp
-            src/process/resource.hpp
-            src/process/file.cpp
-            src/process/file.hpp
-            src/error/error.cpp
-            src/error/error.hpp
-            src/uci/command.cpp
-            src/uci/command.hpp 
-            src/uci/process.cpp
-            src/uci/process.hpp
-            src/uci/info.cpp
-            src/uci/info.hpp
+            src/ucichess/process/process.cpp
+            src/ucichess/process/process.hpp
+            src/ucichess/process/resource.cpp
+            src/ucichess/process/resource.hpp
+            src/ucichess/process/file.cpp
+            src/ucichess/process/file.hpp
+            src/ucichess/error/error.cpp
+            src/ucichess/error/error.hpp
+            src/ucichess/uci/command.cpp
+            src/ucichess/uci/command.hpp 
+            src/ucichess/uci/process.cpp
+            src/ucichess/uci/process.hpp
+            src/ucichess/uci/info.cpp
+            src/ucichess/uci/info.hpp
             )
 
-set_target_properties(${project_name} PROPERTIES VERSION ${PROJECT_VERSION})
-target_include_directories(${project_name} PRIVATE .)
+add_subdirectory(src)
+enable_testing()
+add_subdirectory(test)
+
+# set_target_properties(${project_name} PROPERTIES VERSION ${PROJECT_VERSION})
+# target_include_directories(${project_name} PRIVATE .)
 
 
-# ---- Install rules ----
+# # ---- Install rules ----
 
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
@@ -50,17 +54,4 @@ install(
 
 
 configure_file( ${project_name}.pc.in  ${project_name}.pc @ONLY)
-
-
-# Tests
-# add_executable(process test/process.cpp)
-# target_link_libraries(process ${project_name} )
-
-# add_executable(pipe test/file.cpp)
-# target_link_libraries(pipe ${project_name} )
-
-# add_executable(uci_test test/uci_test.cpp)
-# target_link_libraries(uci_test ${project_name} )
-#I followed this link.
-#https://stackoverflow.com/questions/17511496/how-to-create-a-shared-library-with-cmake
 
