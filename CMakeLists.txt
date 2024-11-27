@@ -4,23 +4,6 @@ set(project_name ucichess)
 
 project(${project_name} VERSION 0.9.3 DESCRIPTION "UCI chess protocol adapter")
 
-add_library(${project_name}
-            SHARED
-            src/ucichess/process/process.cpp
-            src/ucichess/process/process.hpp
-            src/ucichess/process/resource.cpp
-            src/ucichess/process/resource.hpp
-            src/ucichess/process/file.cpp
-            src/ucichess/process/file.hpp
-            src/ucichess/error/error.cpp
-            src/ucichess/error/error.hpp
-            src/ucichess/uci/command.cpp
-            src/ucichess/uci/command.hpp 
-            src/ucichess/uci/process.cpp
-            src/ucichess/uci/process.hpp
-            src/ucichess/uci/info.cpp
-            src/ucichess/uci/info.hpp
-            )
 
 add_subdirectory(src)
 enable_testing()

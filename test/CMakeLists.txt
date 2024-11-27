@@ -1,5 +1,5 @@
 
-add_executable(ucichess-tests ucichess/tests.cpp
+add_executable(ucichess-tests ucichess/uci_test.cpp
 )
 
 set_target_properties(ucichess-tests PROPERTIES
@@ -10,14 +10,6 @@ set_target_properties(ucichess-tests PROPERTIES
 target_include_directories(ucichess-tests
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
 )
+target_link_libraries(ucichess-tests ${project_name})
+add_dependencies(ucichess-tests ${project_name})
 
-add_dependencies(ucichess-tests ${UCICHESS_NAME})
-
-target_link_oatpp(ucichess-tests)
-
-target_link_libraries(ucichess-tests
-        PRIVATE ${OATPP_THIS_ucichess_NAME}
-      
-)
-
-add_test(ucichess-tests ucichess-tests)

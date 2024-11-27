@@ -1,7 +1,9 @@
-#include "uci/command.hpp"
-#include "uci/process.hpp"
+#include "../../src/ucichess/uci/command.hpp"
+#include "../../src/ucichess/uci/process.hpp"
+#include <iostream>
 #include <sstream>
 #include <vector>
+
 // split_s is the core machinery. It split s at splitPoint, and returns a vector.
 std::vector<std::string> split_s(const std::string& s, char delimeter) {
   std::vector<std::string> elements;
@@ -11,10 +13,6 @@ std::vector<std::string> split_s(const std::string& s, char delimeter) {
     elements.push_back(item);
   }
   return elements;
-}
-
-void Reply(std::string r) {
-  std::cout << r;
 }
 
 int main(int argc, const char** argv) {
@@ -47,7 +45,7 @@ int main(int argc, const char** argv) {
       }
     }
     if(!command_found) {
-      Reply("Received unknown command: " + command);
+      std::cout << "Received unknown command: " << command;
     }
   }
 
