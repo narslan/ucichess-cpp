@@ -6,20 +6,20 @@ project(${project_name} VERSION 0.9.3 DESCRIPTION "UCI chess protocol adapter")
 
 add_library(${project_name}
             SHARED
-            process/process.cpp
-            process/process.hpp
-            process/resource.cpp
-            process/resource.hpp
-            process/file.cpp
-            process/file.hpp
-            error/error.cpp
-            error/error.hpp
-            uci/command.cpp
-            uci/command.hpp 
-            uci/process.cpp
-            uci/process.hpp
-            uci/info.cpp
-            uci/info.hpp
+            src/process/process.cpp
+            src/process/process.hpp
+            src/process/resource.cpp
+            src/process/resource.hpp
+            src/process/file.cpp
+            src/process/file.hpp
+            src/error/error.cpp
+            src/error/error.hpp
+            src/uci/command.cpp
+            src/uci/command.hpp 
+            src/uci/process.cpp
+            src/uci/process.hpp
+            src/uci/info.cpp
+            src/uci/info.hpp
             )
 
 set_target_properties(${project_name} PROPERTIES VERSION ${PROJECT_VERSION})
@@ -44,7 +44,7 @@ install(FILES ${CMAKE_BINARY_DIR}/${project_name}.pc DESTINATION ${CMAKE_INSTALL
 install(
     EXPORT ${project_name}
     NAMESPACE ${project_name}::
-    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     COMPONENT ${project_name}
 )
 
