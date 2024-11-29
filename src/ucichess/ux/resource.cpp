@@ -1,6 +1,6 @@
 #include "resource.hpp"
 
-namespace ucichess {
+namespace ux {
 
   long Resource::memusage() {
     struct rusage usage;
@@ -8,4 +8,4 @@ namespace ucichess {
     ret = getrusage(RUSAGE_SELF, &usage);
     return usage.ru_maxrss; // in KB
   } // namespace ucichess
-} // namespace ucichess
+} // namespace ux

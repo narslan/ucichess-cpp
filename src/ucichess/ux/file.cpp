@@ -2,7 +2,7 @@
 #include "../error/error.hpp"
 #include <fcntl.h>
 #include <unistd.h>
-namespace ucichess {
+namespace ux {
   /**
 	Calls pipe.
 */
@@ -78,4 +78,4 @@ namespace ucichess {
 	Calls writev.
 */
 
-} // namespace ucichess
+} // namespace ux

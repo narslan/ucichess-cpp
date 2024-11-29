@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <vector>
 
-namespace ucichess {
+namespace ux {
 
   class Process {
     protected:
@@ -110,4 +110,4 @@ namespace ucichess {
     ~Process() = default;
   };
 
-} // namespace ucichess
+} // namespace ux

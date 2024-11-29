@@ -1,6 +1,6 @@
 #pragma once
 #include <cstdio>
-namespace ucichess {
+namespace ux {
   class File {
     public:
     ~File() = default;
@@ -36,4 +36,4 @@ namespace ucichess {
     ssize_t size;
   };
 
-} // namespace ucichess
+} // namespace ux
