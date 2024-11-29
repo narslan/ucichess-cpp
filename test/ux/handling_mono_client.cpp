@@ -1,25 +1,23 @@
 #include "../../src/ucichess/ux/ux.hpp"
 #include <cstdlib>
-#include <string>
-#include <string_view>
 #include <sys/socket.h>
 #include <unistd.h>
 
-constexpr std::string SOCKETNAME = "MySocket";
+const char* SOCKETNAME = "MySocket";
 
 int main(int argc, const char** argv) {
 
-  ::unlink(SOCKETNAME.c_str());
+  ::unlink(SOCKETNAME);
   //we create a unix socket.
 
-  ux::SockAddrUn sa{SOCKETNAME.c_str()};
+  ux::SockAddrUn sa{SOCKETNAME};
 
-  if(ux::Process::fork()) { /* in child*/
+  if(ux::Process::fork() == 0) { /* in child*/
     ux::Socket fd_skt{};
     fd_skt.socket();
     fd_skt.connect(sa);
     std::string h{"Hello"};
-    fd_skt.write(h.c_str(), h.size());
+    fd_skt.write(h.c_str(), h.size() + 1);
     char buf[100];
     fd_skt.read(buf, sizeof(buf));
     fmt::print("client got: {}\n", buf);
@@ -37,7 +35,7 @@ int main(int argc, const char** argv) {
     fmt::print("server got: {}\n", buf);
 
     std::string h{"Good bye"};
-    sock_clt.write(h.c_str(), h.size());
+    sock_clt.write(h.c_str(), h.size() + 1);
     sock_clt.close();
     fd_skt.close();
     exit(EXIT_SUCCESS);

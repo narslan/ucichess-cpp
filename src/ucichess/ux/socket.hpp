@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ux.hpp"
+#include "file.hpp"
 #include <arpa/inet.h>
 #include <cstddef>
 #include <netdb.h>
@@ -12,7 +12,7 @@ namespace ux {
   /**
 	\ingroup ux
 */
-  class SockIPv4 : public Base {
+  class SockIPv4 {
     protected:
     in_addr_t ipv4;
 
@@ -36,7 +36,7 @@ namespace ux {
   /**
 	\ingroup ux
 */
-  class SockIPv6 : public Base {
+  class SockIPv6 {
     protected:
     uint8_t ipv6[16];
 

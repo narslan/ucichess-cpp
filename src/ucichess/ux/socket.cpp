@@ -1,6 +1,6 @@
 #include "socket.hpp"
 #include "../error/error.hpp"
-
+#include <sys/un.h>
 /*
 	Copyright 2003 by Marc J. Rochkind. All rights reserved.
 	May be copied only for purposes and under conditions described
@@ -20,6 +20,7 @@
 */
 
 #include <arpa/inet.h>
+#include <cstring>
 
 using namespace ux;
 
