@@ -1,6 +1,7 @@
 #include "file.hpp"
 #include "../error/error.hpp"
 #include <fcntl.h>
+#include <sys/uio.h>
 #include <unistd.h>
 namespace ux {
   /**
@@ -60,6 +61,17 @@ namespace ux {
   }
 
   /**
+	Calls readv.
+*/
+  ssize_t File::readv(const struct iovec* iov, int iovcnt) {
+    ssize_t n;
+
+    if((n = ::readv(fd, iov, iovcnt)) == -1)
+      throw Error(errno);
+    return n;
+  }
+
+  /**
 	Calls write or pwrite.
 */
   ssize_t File::write(const void* buf, size_t nbytes, off_t offset) {
@@ -77,5 +89,72 @@ namespace ux {
   /**
 	Calls writev.
 */
+  ssize_t File::writev(const struct iovec* iov, int iovcnt) {
+    ssize_t n;
+
+    if((n = ::writev(fd, iov, iovcnt)) == -1)
+      throw Error(errno);
+    return n;
+  }
+  /**
+	Calls select.
+*/
+  /* static */ int
+  select(int nfds, fd_set* readset, fd_set* writeset, fd_set* errorset, struct timeval* timeout) {
+    int r;
+
+    if((r = ::select(nfds, readset, writeset, errorset, timeout)) == -1)
+      throw Error(errno);
+    return r;
+  }
+
+  /**
+	Calls pselect.
+*/
+  /* static */ int pselect(int nfds,
+                           fd_set* readset,
+                           fd_set* writeset,
+                           fd_set* errorset,
+                           const struct timespec* timeout,
+                           const sigset_t* sigmask) {
+    int r;
+
+    if((r = ::pselect(nfds, readset, writeset, errorset, timeout, sigmask)) == -1)
+      throw Error(errno);
+    return r;
+  }
+  /**
+	Calls poll.
+*/
+  /* static */ int poll(struct pollfd fdinfo[], nfds_t nfds, int timeout) {
+    int r;
+
+    if((r = ::poll(fdinfo, nfds, timeout)) == -1)
+      throw Error(errno);
+    return r;
+  }
+
+  bool File::operator<(const int& rhs) {
+    return fd < rhs;
+  };
+  bool File::operator>(const int& rhs) {
+    return fd > rhs;
+  };
+  bool File::operator==(const int& rhs) {
+    return fd == rhs;
+  };
+  //From https://en.cppreference.com/w/cpp/language/operators
+  // prefix increment
+  File& File::operator++() {
+    fd++;
+    return *this;
+  }
+
+  // postfix increment
+  File File::operator++(int) {
+    File old = *this; // copy old value
+    operator++(); // prefix increment
+    return old; // return old value
+  }
 
 } // namespace ux

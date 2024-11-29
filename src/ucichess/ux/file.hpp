@@ -1,7 +1,8 @@
 #pragma once
 #include <cstdio>
-#include <sys/poll.h>
-#include <sys/select.h>
+#include <poll.h>
+#include <sys/uio.h>
+#include <utime.h>
 namespace ux {
   class File {
     public:
@@ -49,6 +50,13 @@ namespace ux {
                        const sigset_t* sigmask = NULL);
     static int poll(struct pollfd fdinfo[], nfds_t nfds, int timeout = -1);
 
+    // to enable comparing File objects with int handles.
+    bool operator<(const int& rhs);
+    bool operator>(const int& rhs);
+    bool operator==(const int& rhs);
+
+    File& operator++();
+    File operator++(int);
     int fd;
     const char* path;
     ssize_t size;
