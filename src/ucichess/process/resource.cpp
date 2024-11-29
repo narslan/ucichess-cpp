@@ -1,7 +1,5 @@
 #include "resource.hpp"
 
-#include <bits/types/struct_rusage.h>
-
 namespace ucichess {
 
   long Resource::memusage() {

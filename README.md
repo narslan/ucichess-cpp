@@ -8,7 +8,7 @@ I use it for a personal project.
 
 # Licence
 
-There are from these works. They have public licenses.
+There are some part from following works. They have public licenses.
 
 1. For interacting with pipes.
    [UCI Analayzer](https://www.cs.kent.ac.uk/people/staff/djb/uci-analyser/)
