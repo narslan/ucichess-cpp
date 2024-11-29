@@ -21,12 +21,12 @@
 #include "error.hpp"
 #include <netdb.h>
 
-using namespace ucichess;
+using namespace ux;
 
 /**
 	Stream operator to output Error.
 */
-std::ostream& ucichess::operator<<(std::ostream& s, const Error& e) {
+std::ostream& ux::operator<<(std::ostream& s, const Error& e) {
   s << "[ERROR: " << e.what() << "]";
   return s;
 }

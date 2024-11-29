@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../error/error.hpp"
+#include <fmt/core.h>
 #include <string>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -54,7 +55,7 @@ namespace ux {
         throw Error(errno, EC_RESOURCE);
       }
       catch(const std::exception& err) {
-        std::cout << err.what() << "\n";
+        fmt::print("err: {}\n", err.what());
       }
     }
 
@@ -74,7 +75,7 @@ namespace ux {
         throw Error(errno, EC_RESOURCE);
       }
       catch(const std::exception& err) {
-        std::cout << err.what() << "\n";
+        fmt::print("{}\n", err.what());
       }
     }
 

@@ -2,7 +2,7 @@
 #include "../error/error.hpp"
 #include <unistd.h>
 
-namespace ucichess {
+namespace ux {
 
   uid_t Process::getuid(void) {
     return ::getuid();
@@ -48,4 +48,4 @@ namespace ucichess {
     return rtn_pid;
   }
 
-} // namespace ucichess
+} // namespace ux

@@ -1,12 +1,58 @@
 #pragma once
 
-#include "file.hpp"
+#include "ux.hpp"
 #include <cstddef>
 #include <netdb.h>
 #include <sys/socket.h>
 #include <unistd.h>
 
 namespace ux {
+
+  /**
+	\ingroup ux
+*/
+  class SockIPv4 : public Base {
+    protected:
+    in_addr_t ipv4;
+
+    public:
+    SockIPv4(in_addr_t ip = 0) {
+      set(ip);
+    }
+    SockIPv4(const char* str) {
+      set(str);
+    }
+    void set(const char* str);
+    void set(in_addr_t ip = 0) {
+      ipv4 = ip;
+    }
+    in_addr_t get_ipv4(void) const {
+      return ipv4;
+    }
+    const char* get_string(char* buf, socklen_t bufsize) const;
+  };
+
+  /**
+	\ingroup ux
+*/
+  class SockIPv6 : public Base {
+    protected:
+    uint8_t ipv6[16];
+
+    public:
+    SockIPv6(uint8_t* ip = NULL) {
+      set(ip);
+    }
+    SockIPv6(const char* str) {
+      set(str);
+    }
+    void set(const char* str);
+    void set(uint8_t*);
+    const uint8_t* get_ipv6(void) const {
+      return ipv6;
+    }
+    const char* get_string(char* buf, socklen_t bufsize) const;
+  };
 
   class SockAddr {
     protected:
@@ -62,6 +108,35 @@ namespace ux {
                             unsigned flags);
   };
 
+  /**
+	\ingroup Ux
+*/
+  class SockAddrUn : public SockAddr {
+    public:
+    SockAddrUn(const char* path = "") {
+      set(path);
+    }
+    void set(const char* path = "");
+  };
+
+  /**
+	\ingroup Ux
+*/
+  class SockAddrIn : public SockAddr {
+    public:
+    SockAddrIn(in_port_t port, struct in_addr& sa) {
+      set(port, sa);
+    }
+    SockAddrIn(in_port_t port, in_addr_t ipv4) {
+      set(port, ipv4);
+    }
+    SockAddrIn(in_port_t port, const char* dotted) {
+      set(port, dotted);
+    }
+    void set(in_port_t port, struct in_addr& sa);
+    void set(in_port_t port, in_addr_t ipv4);
+    void set(in_port_t port, const char* dotted);
+  };
   class Socket : public File {
 
     public:

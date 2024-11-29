@@ -9,7 +9,9 @@ set_target_properties(ucichess-tests PROPERTIES
 
 target_include_directories(ucichess-tests
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+      
 )
-target_link_libraries(ucichess-tests ${project_name})
+find_package(fmt)
+target_link_libraries(ucichess-tests ${project_name}   fmt::fmt)
 add_dependencies(ucichess-tests ${project_name})
 

@@ -23,7 +23,7 @@ namespace ucichess {
     p pid = p::fork();
     switch(pid) {
     case -1:
-      ucichess::Error(errno, EC_RESOURCE);
+      ux::Error(errno, EC_RESOURCE);
     case 0: // child.
 
       parentToChild[0].dup2(STDIN_FILENO);

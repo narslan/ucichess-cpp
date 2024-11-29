@@ -16,18 +16,18 @@
 
 */
 #pragma once
-#include "ec.h"
-#include <iostream>
 
 namespace ux {
 
   class Base { };
 
 } // namespace ux
+
 #include "file.hpp"
 #include "process.hpp"
 #include "resource.hpp"
 #include "socket.hpp"
+
 // #include "uxaio.hpp"
 // #include "uxdir.hpp"
 // #include "uxdirstream.hpp"

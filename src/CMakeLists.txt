@@ -1,12 +1,14 @@
 
 add_library(${project_name}
             SHARED
-            ucichess/process/process.cpp
-            ucichess/process/process.hpp
-            ucichess/process/resource.cpp
-            ucichess/process/resource.hpp
-            ucichess/process/file.cpp
-            ucichess/process/file.hpp
+            ucichess/ux/process.cpp
+            ucichess/ux/process.hpp
+            ucichess/ux/resource.cpp
+            ucichess/ux/resource.hpp
+            ucichess/ux/file.cpp
+            ucichess/ux/file.hpp
+            ucichess/ux/socket.cpp
+            ucichess/ux/socket.hpp
             ucichess/error/error.cpp
             ucichess/error/error.hpp
             ucichess/uci/command.cpp

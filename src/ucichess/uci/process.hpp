@@ -1,13 +1,13 @@
 #pragma once
 
-#include "../process/file.hpp"
-#include "../process/process.hpp"
+#include "../ux/ux.hpp"
+
 #include <map>
 #include <string>
 
 namespace ucichess {
-  using f = ucichess::File;
-  using p = ucichess::Process;
+  using f = ux::File;
+  using p = ux::Process;
 
   class ChessEngine {
     public:

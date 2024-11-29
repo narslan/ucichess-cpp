@@ -47,11 +47,11 @@ typedef enum {
   try {                                                                                            \
     s;                                                                                             \
   }                                                                                                \
-  catch(ucichess::Error e) {                                                                       \
+  catch(ux::Error e) {                                                                             \
     EC_EXIT(e)                                                                                     \
   }
 
-namespace ucichess {
+namespace ux {
 
   class Error : public std::exception {
     protected:
@@ -89,4 +89,4 @@ Operator to display Error.
   std::ostream& operator<<(std::ostream& s, const Error& e);
   //@}
 
-} // namespace ucichess
+} // namespace ux
