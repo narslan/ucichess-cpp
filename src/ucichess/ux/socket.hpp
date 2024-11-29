@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ux.hpp"
+#include <arpa/inet.h>
 #include <cstddef>
 #include <netdb.h>
 #include <sys/socket.h>

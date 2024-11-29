@@ -80,6 +80,11 @@ const char* SockIPv6::get_string(char* buf, socklen_t bufsize) const {
 */
 void SockAddrUn::set(const char* path) {
   struct sockaddr_un* p = (struct sockaddr_un*)&sa_storage;
+  p->sun_family = AF_UNIX;
+  if(strlen(path) >= sizeof(p->sun_path))
+    throw Error(ENAMETOOLONG);
+  strcpy(p->sun_path, path);
+  set_len(sizeof(struct sockaddr_un));
 }
 
 /**
