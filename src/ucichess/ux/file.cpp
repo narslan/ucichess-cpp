@@ -99,8 +99,8 @@ namespace ux {
   /**
 	Calls select.
 */
-  /* static */ int
-  select(int nfds, fd_set* readset, fd_set* writeset, fd_set* errorset, struct timeval* timeout) {
+  /* static */ int File::select(
+      int nfds, fd_set* readset, fd_set* writeset, fd_set* errorset, struct timeval* timeout) {
     int r;
 
     if((r = ::select(nfds, readset, writeset, errorset, timeout)) == -1)
@@ -111,12 +111,12 @@ namespace ux {
   /**
 	Calls pselect.
 */
-  /* static */ int pselect(int nfds,
-                           fd_set* readset,
-                           fd_set* writeset,
-                           fd_set* errorset,
-                           const struct timespec* timeout,
-                           const sigset_t* sigmask) {
+  /* static */ int File::pselect(int nfds,
+                                 fd_set* readset,
+                                 fd_set* writeset,
+                                 fd_set* errorset,
+                                 const struct timespec* timeout,
+                                 const sigset_t* sigmask) {
     int r;
 
     if((r = ::pselect(nfds, readset, writeset, errorset, timeout, sigmask)) == -1)

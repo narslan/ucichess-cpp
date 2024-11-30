@@ -1,5 +1,4 @@
 #include "../../src/ucichess/ux/ux.hpp"
-#include <sys/select.h>
 const char* SOCKETNAME = "MySocket";
 
 bool run_server(ux::SockAddrUn& sa) {
@@ -21,7 +20,7 @@ bool run_server(ux::SockAddrUn& sa) {
 
   while(true) {
     read_set = set;
-    ux::File::select(fd_hwm + 1, &read_set, nullptr, nullptr);
+    ux::File::select(fd_hwm + 1, &read_set, nullptr, nullptr, nullptr);
     for(ux::File fd = 0; fd < fd_hwm; fd++) {
       if(FD_ISSET(fd.fd, &read_set)) {
         if(fd == fd_skt.fd) {
@@ -56,28 +55,32 @@ static bool run_client(ux::SockAddrUn& sa) {
     ux::Socket fd_skt{};
     char buf[100];
     fd_skt.socket();
+    fd_skt.connect(sa);
 
-    while(fd_skt.connect(sa) == -1)
-      if(errno == ENOENT) {
-        sleep(1);
-        continue;
-      }
-      else
-        EC_FAIL snprintf(buf, sizeof(buf), "Hello from %ld!", (long)getpid());
-    ec_neg1(write(fd_skt, buf, strlen(buf) + 1)) ec_neg1(read(fd_skt, buf, sizeof(buf)))
-        printf("Client got \"%s\"\n", buf);
-    ec_neg1(close(fd_skt)) exit(EXIT_SUCCESS);
+    if(errno == ENOENT) {
+      sleep(1);
+    }
+    else {
+      snprintf(buf, sizeof(buf), "Hello from %ld!", (long)getpid());
+      fd_skt.write(buf, strlen(buf) + 1);
+      fd_skt.read(buf, sizeof(buf));
+
+      fmt::print("Client got \"{}\"\n", buf);
+      fd_skt.close();
+    }
+    return true;
   }
-  return true;
-  EC_CLEANUP_BGN
-  /* only child gets here */
-  exit(EXIT_FAILURE);
-  EC_CLEANUP_END
+  return false;
 }
 
 int main(int argc, const char** argv) {
-
+  ::unlink(SOCKETNAME);
   ux::SockAddrUn sa{SOCKETNAME};
+  int nclient;
+  for(nclient = 1; nclient <= 4; nclient++) {
+    run_client(sa);
+  }
+  run_server(sa);
 
   return 0;
 }

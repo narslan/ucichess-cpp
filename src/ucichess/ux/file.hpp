@@ -1,7 +1,9 @@
 #pragma once
 #include <cstdio>
 #include <poll.h>
+#include <sys/select.h>
 #include <sys/uio.h>
+
 #include <utime.h>
 namespace ux {
   class File {
