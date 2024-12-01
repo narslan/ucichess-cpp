@@ -3,8 +3,7 @@ const char* SOCKETNAME = "MySocket";
 
 bool run_server(ux::SockAddrUn& sa) {
 
-  int fd; //?
-  int fd_hwm; //?
+  int fd_hwm{}; //?
   ux::Socket fd_client;
   ux::Socket fd_skt{};
   fd_skt.socket();
@@ -21,7 +20,8 @@ bool run_server(ux::SockAddrUn& sa) {
   while(true) {
     read_set = set;
     ux::File::select(fd_hwm + 1, &read_set, nullptr, nullptr, nullptr);
-    for(ux::File fd = 0; fd < fd_hwm; fd++) {
+    for(int fdi = 0; fdi < fd_hwm; fdi++) {
+      ux::File fd{fdi};
       if(FD_ISSET(fd.fd, &read_set)) {
         if(fd == fd_skt.fd) {
           fd_client = fd_skt.accept();

@@ -1,5 +1,6 @@
 #include "process.hpp"
 #include "../error/error.hpp"
+#include <stdexcept>
 #include <unistd.h>
 
 namespace ux {
@@ -17,7 +18,7 @@ namespace ux {
     pid_t rtn_pid;
 
     if((rtn_pid = ::getpgid(pid)) == -1)
-      throw;
+      throw std::runtime_error(fmt::format("err: {}", rtn_pid));
     return rtn_pid;
   }
 

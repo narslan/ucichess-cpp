@@ -17,30 +17,9 @@
 */
 #pragma once
 
-namespace ux {
-
-  class Base { };
-
-} // namespace ux
+namespace ux { } // namespace ux
 
 #include "file.hpp"
 #include "process.hpp"
 #include "resource.hpp"
 #include "socket.hpp"
-
-// #include "uxaio.hpp"
-// #include "uxdir.hpp"
-// #include "uxdirstream.hpp"
-// #include "uxerr.hpp"
-// #include "uxexitstatus.hpp"
-// #include "uxfile.hpp"
-// #include "uxnetdb.hpp"
-// #include "uxposixipc.hpp"
-// #include "uxprocess.hpp"
-// #include "uxsigset.hpp"
-// #include "uxsocket.hpp"
-// #include "uxsystem.hpp"
-// #include "uxsysvipc.hpp"
-// #include "uxterminal.hpp"
-// #include "uxtime.hpp"
-// #include "uxtimetm.hpp"
