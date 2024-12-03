@@ -1,20 +1,36 @@
 #include "../../src/ucichess/uci/process.hpp"
 #include "nonstd/expected.hpp"
+#include <fmt/core.h>
+#include <string>
 using namespace nonstd;
 using namespace std::literals;
 
-auto spin_engine(char const* const text) -> expected<int, std::string>
+auto spin_engine(std::string path) -> expected<std::string, std::string>
 {
-  ucichess::ChessEngine e{"stockfish"};
+  ucichess::ChessEngine e{path};
 
   std::map<std::string, std::string> options;
 
   e.initEngine(10, options);
+  std::string bm = e.bestMove();
 
-  if(pos != text)
-    return value;
-  else
-    return make_unexpected("'"s + text + "' isn't a number");
+  if(bm != "a3") {
+    e.quit();
+    return bm;
+  }
+  else {
+    e.quit();
+    return make_unexpected("'"s + bm + "' isn't a number");
+  }
 }
 
-int main() { }
+int main()
+{
+
+  auto es = spin_engine("stockfish");
+  if(es)
+    fmt::print("{}\n", es->data());
+  else
+    fmt::print("{}\n", es.error());
+  return 0;
+}

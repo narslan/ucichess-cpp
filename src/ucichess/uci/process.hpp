@@ -25,7 +25,6 @@ namespace ucichess {
     void send(const char* str);
     bool setIdentity();
     bool checkIsReady();
-    void quitEngine();
     void setPosition(const std::string& moves, const std::string& fenstring);
     void setFENPosition(const std::string& fenstring, const std::string& moves);
     void setOption(const std::string& name, const std::string& value);

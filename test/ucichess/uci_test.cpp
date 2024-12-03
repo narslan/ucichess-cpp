@@ -37,7 +37,7 @@ int main(int argc, const char** argv)
         command_found = true;
         uci_command.func(c, args);
         if(command == "quit") {
-          c.quitEngine();
+          c.quit();
           quit_flag = true;
         }
         else {
