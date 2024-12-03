@@ -5,7 +5,8 @@
 #include <vector>
 
 // split_s is the core machinery. It split s at splitPoint, and returns a vector.
-std::vector<std::string> split_s(const std::string& s, char delimeter) {
+std::vector<std::string> split_s(const std::string& s, char delimeter)
+{
   std::vector<std::string> elements;
   std::stringstream string_stream(s);
   std::string item;
@@ -15,8 +16,9 @@ std::vector<std::string> split_s(const std::string& s, char delimeter) {
   return elements;
 }
 
-int main(int argc, const char** argv) {
-  ucichess::ChessEngine c{"lc0"};
+int main(int argc, const char** argv)
+{
+  ucichess::ChessEngine c{"stockfish"};
   std::map<std::string, std::string> options;
   c.initEngine(10, options);
 
@@ -32,7 +34,6 @@ int main(int argc, const char** argv) {
     for(ucichess::command uci_command : ucichess::uci_commands) {
 
       if(command == uci_command.name) {
-
         command_found = true;
         uci_command.func(c, args);
         if(command == "quit") {

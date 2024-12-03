@@ -15,8 +15,8 @@ add_library(${project_name}
             ucichess/uci/command.hpp 
             ucichess/uci/process.cpp
             ucichess/uci/process.hpp
-            ucichess/uci/info.cpp
-            ucichess/uci/info.hpp
+            ucichess/uci/options.cpp
+            ucichess/uci/options.hpp
             )
 
 set_target_properties(${project_name} PROPERTIES
