@@ -4,9 +4,9 @@ set(project_name ucichess)
 
 project(${project_name} VERSION 0.9.3 DESCRIPTION "UCI chess protocol adapter")
 
+add_subdirectory(src)
 add_subdirectory(external)
 
-add_subdirectory(src)
 enable_testing()
 add_subdirectory(test)
 
@@ -15,26 +15,4 @@ add_subdirectory(test)
 
 
 # # ---- Install rules ----
-
-include(CMakePackageConfigHelpers)
-include(GNUInstallDirs)
-
-find_package(fmt)
-install(
-    TARGETS ${project_name}
-    EXPORT ${project_name}
-    LIBRARY COMPONENT ${CMAKE_INSTALL_LIBDIR}
-    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    )
-install(FILES ${CMAKE_BINARY_DIR}/${project_name}.pc DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
-
-install(
-    EXPORT ${project_name}
-    NAMESPACE ${project_name}::
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    COMPONENT ${project_name}
-)
-
-
-configure_file( ${project_name}.pc.in  ${project_name}.pc @ONLY)
 
