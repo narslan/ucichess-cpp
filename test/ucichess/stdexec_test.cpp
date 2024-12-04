@@ -20,8 +20,6 @@
 #include "exec/finally.hpp"
 #include "exec/when_any.hpp"
 
-#include "stdexec/execution.hpp"
-
 #include <chrono>
 #include <thread>
 

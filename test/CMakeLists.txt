@@ -3,7 +3,7 @@
 find_package(fmt)
 
 
-list(APPEND TESTS_UCI uci_test engine_spin_test unifex_test stdexec_test)
+list(APPEND TESTS_UCI uci_test engine_spin_test unifex_test stdexec_test stdexec_hello)
 
 foreach(test IN LISTS TESTS_UCI)
         add_executable(${test} "ucichess/${test}.cpp" )
