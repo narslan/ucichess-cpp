@@ -13,8 +13,8 @@ add_library(${project_name}
             ucichess/error/error.hpp
             ucichess/uci/command.cpp
             ucichess/uci/command.hpp 
-            ucichess/uci/process.cpp
-            ucichess/uci/process.hpp
+            ucichess/uci/engine.cpp
+            ucichess/uci/engine.hpp
             ucichess/uci/options.cpp
             ucichess/uci/options.hpp
             )

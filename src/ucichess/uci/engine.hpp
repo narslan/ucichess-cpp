@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../ux/ux.hpp"
-
+#include "../ux/file.hpp"
+#include "../ux/process.hpp"
 #include <map>
 #include <string>
 
@@ -20,7 +20,7 @@ namespace ucichess {
     void go();
     bool waitForResponse(const char* str);
     std::string getResponse(bool& eof);
-    bool initEngine(int searchDepth, std::map<std::string, std::string>& options);
+    bool initEngine();
     void send(const std::string& str);
     void send(const char* str);
     bool setIdentity();

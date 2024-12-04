@@ -28,8 +28,8 @@ struct FindByName {
 
 int main(int argc, const char** argv) {
   ucichess::ChessEngine c{"stockfish"};
-  std::map<std::string, std::string> options;
-  c.initEngine(10, options);
+
+  c.initEngine();
 
   std::string in;
 
@@ -42,7 +42,6 @@ int main(int argc, const char** argv) {
     if(command == "quit") {
       std::vector<ucichess::command>::iterator it = std::find_if(
           ucichess::uci_commands.begin(), ucichess::uci_commands.end(), FindByName("quit"));
-      fmt::print("fiind quit '{}'\n", command);
       if(it != ucichess::uci_commands.end()) {
         it->func(c, {});
       }

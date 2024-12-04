@@ -1,5 +1,5 @@
 
-#include "process.hpp"
+#include "engine.hpp"
 #include "../error/error.hpp"
 #include <cstring>
 #include <fcntl.h>
@@ -13,8 +13,7 @@ namespace ucichess {
   // printf("read %ld bytes: %s\n", (long)nread, s);
 
   ChessEngine::ChessEngine(const std::string& path)
-      : m_path{path}
-  {
+      : m_path{path} {
     f parentToChild[2];
     f childToParent[2];
     EC_CATCH(f::pipe(parentToChild));
@@ -48,8 +47,7 @@ namespace ucichess {
     }
   };
 
-  p ChessEngine::wait()
-  {
+  p ChessEngine::wait() {
     return p::wait(m_child_process);
   }
 
@@ -57,8 +55,7 @@ namespace ucichess {
  * Wait for the given response from the engine.
  * Return true on success or false on failure (EOF).
  */
-  bool ChessEngine::waitForResponse(const char* str)
-  {
+  bool ChessEngine::waitForResponse(const char* str) {
     bool eof = false;
     std::string response;
     do {
@@ -71,8 +68,7 @@ namespace ucichess {
  * Read and return a single line of response from the engine.
  * Set eof if the end of file is reached.
  */
-  std::string ChessEngine::getResponse(bool& eof)
-  {
+  std::string ChessEngine::getResponse(bool& eof) {
     const int MAXBUFF = 100;
     // Since the reads are not guaranteed to be line-based, buffer retains
     // text read but not returned on a previous call.
@@ -129,28 +125,24 @@ namespace ucichess {
     return result;
   }
 
-  void ChessEngine::quit()
-  {
+  void ChessEngine::quit() {
     send("quit");
   }
 
-  void ChessEngine::isready()
-  {
+  void ChessEngine::isready() {
     send("isready");
   }
 
   /*
  * API 2
  */
-  void ChessEngine::send(const std::string& str)
-  {
+  void ChessEngine::send(const std::string& str) {
     send(str.c_str());
   }
   /*
  * Send the given string to the engine.
  */
-  void ChessEngine::send(const char* str)
-  {
+  void ChessEngine::send(const char* str) {
 
     fprintf(toEngine, "%s\n", str);
     fflush(toEngine);
@@ -159,8 +151,7 @@ namespace ucichess {
   /* Look for "id name" in the engine's initial output and use it
  * to set the engine's identity.
  */
-  bool ChessEngine::setIdentity(void)
-  {
+  bool ChessEngine::setIdentity(void) {
     // Get the identity.
     const char* id_prefix = "id name ";
     bool eof, identitySet = false;
@@ -180,8 +171,7 @@ namespace ucichess {
   /*
  * Check that the engine is ready.
  */
-  bool ChessEngine::checkIsReady()
-  {
+  bool ChessEngine::checkIsReady() {
     send("isready");
 
     if(waitForResponse("readyok")) {
@@ -193,15 +183,13 @@ namespace ucichess {
     // return !eof && response.compare("readyok") == 0;
   }
 
-  void ChessEngine::go()
-  {
+  void ChessEngine::go() {
     std::stringstream ss;
     ss << "go depth " << searchDepth;
     send(ss.str());
   }
 
-  void ChessEngine::setPosition(const std::string& moves, const std::string& fenstring)
-  {
+  void ChessEngine::setPosition(const std::string& moves, const std::string& fenstring) {
     if(fenstring.length() == 0) {
       setFENPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", moves);
     }
@@ -210,8 +198,7 @@ namespace ucichess {
     }
   }
 
-  void ChessEngine::setFENPosition(const std::string& fenstring, const std::string& moves)
-  {
+  void ChessEngine::setFENPosition(const std::string& fenstring, const std::string& moves) {
     std::stringstream ss;
     if(moves.length() == 0) {
       ss << "position fen " << fenstring;
@@ -227,8 +214,7 @@ namespace ucichess {
  * Send a setoption command to the engine using the
  * given name and value.
  */
-  void ChessEngine::setOption(const std::string& name, const std::string& value)
-  {
+  void ChessEngine::setOption(const std::string& name, const std::string& value) {
     std::stringstream ss;
     ss << "setoption name " << name << " value " << value;
     send(ss.str());
@@ -238,23 +224,20 @@ namespace ucichess {
  * Send a setoption command to the engine using the
  * given name and value.
  */
-  void ChessEngine::setOption(const std::string& name, int value)
-  {
+  void ChessEngine::setOption(const std::string& name, int value) {
     std::stringstream ss;
     ss << value;
     setOption(name, ss.str());
   }
 
-  void ChessEngine::setOptions(std::map<std::string, std::string>& options)
-  {
+  void ChessEngine::setOptions(std::map<std::string, std::string>& options) {
     std::map<std::string, std::string>::iterator it;
     for(it = options.begin(); it != options.end(); it++) {
       setOption(it->first, it->second);
     }
   }
 
-  bool ChessEngine::initEngine(int searchDepth, std::map<std::string, std::string>& options)
-  {
+  bool ChessEngine::initEngine() {
     // this->variations = variations;
     this->searchDepth = 10;
 
@@ -271,7 +254,7 @@ namespace ucichess {
       // setOption("MultiPV", variations);
 
       // Set command-line options.
-      setOptions(options);
+      //setOptions(options);
 
       return checkIsReady();
     }
@@ -284,8 +267,7 @@ namespace ucichess {
  * Tokenise text into tokens.
  * tokens is not cleared by this function.
  */
-  void tokenise(std::string& text, std::vector<std::string>& tokens)
-  {
+  void tokenise(std::string& text, std::vector<std::string>& tokens) {
     std::stringstream ss(text);
     std::string token;
     // printf("token: %s\n", token.c_str());
@@ -300,8 +282,7 @@ namespace ucichess {
  * Extract the information from an info line returned
  * by the engine.
  */
-  void extractInfo(std::string& info, std::vector<std::string> infoTokens, int searchDepth)
-  {
+  void extractInfo(std::string& info, std::vector<std::string> infoTokens, int searchDepth) {
 
     if("info" != infoTokens[0]) {
       throw std::runtime_error("tokens doesnt have info");
@@ -326,8 +307,7 @@ namespace ucichess {
     }
   }
 
-  void ChessEngine::obtainEvaluations(void)
-  {
+  void ChessEngine::obtainEvaluations(void) {
     std::string reply;
     std::vector<std::string> tokens;
     bool bestMoveFound = false;
@@ -356,8 +336,7 @@ namespace ucichess {
     } while(!bestMoveFound && !eof);
   }
 
-  std::string ChessEngine::bestMove()
-  {
+  std::string ChessEngine::bestMove() {
     go();
     std::string reply;
     std::string bestmove;
