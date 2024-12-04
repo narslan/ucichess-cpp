@@ -2,24 +2,26 @@
 
 namespace ucichess {
 
-  void UCIQuit(ChessEngine& ce, const StrArgs args) {
+  void UCIQuit(ChessEngine& ce) {
 
     ce.quit();
   };
 
-  void UCIGo(ChessEngine& ce, const StrArgs args) {
+  void UCIGo(ChessEngine& ce) {
     ce.go();
     ce.obtainEvaluations();
   };
-  void UCIBest(ChessEngine& ce, const StrArgs args) {
+  void UCIBest(ChessEngine& ce) {
     auto v = ce.bestMove();
   };
 
-  void UCIIsReady(ChessEngine& ce, const StrArgs args) {
+  void UCIIsReady(ChessEngine& ce) {
     ce.isready();
   };
-  void UCIPosition(ChessEngine& ce, const StrArgs args){};
-  void UCISetOption(ChessEngine& ce, const StrArgs args){};
-  void UCIStop(ChessEngine& ce, const StrArgs args){};
+  void UCIPosition(ChessEngine& ce){};
+  void UCISetOption(ChessEngine& ce){};
+  void UCIInfo(ChessEngine& ce){
+      //ce.getOptions();
+  };
 
 } // namespace ucichess

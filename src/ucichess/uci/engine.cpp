@@ -7,9 +7,19 @@
 #include <sstream>
 #include <string>
 #include <sys/types.h>
+#include <vector>
 
 namespace ucichess {
-
+  // split_s is the core machinery. It split s at splitPoint, and returns a vector.
+  std::vector<std::string> split_s(const std::string& s, char delimeter) {
+    std::vector<std::string> elements;
+    std::stringstream string_stream(s);
+    std::string item;
+    while(std::getline(string_stream, item, delimeter)) {
+      elements.push_back(item);
+    }
+    return elements;
+  }
   // printf("read %ld bytes: %s\n", (long)nread, s);
 
   ChessEngine::ChessEngine(const std::string& path)
@@ -44,6 +54,7 @@ namespace ucichess {
       m_pipe_read = childToParent[0];
       fromEngine = ::fdopen(childToParent[0].fd, "r");
       toEngine = ::fdopen(parentToChild[1].fd, "w");
+      init();
     }
   };
 
@@ -158,6 +169,7 @@ namespace ucichess {
 
     do {
       std::string idResponse = getResponse(eof);
+      fmt::print("{}\n", idResponse);
       if(!eof) {
         if(idResponse.find(id_prefix) == 0) {
           this->identity = idResponse.substr(strlen(id_prefix));
@@ -166,6 +178,32 @@ namespace ucichess {
       }
     } while(!identitySet && !eof);
     return identitySet;
+  }
+
+  /* Look for "id name" in the engine's initial output and use it
+ * to set the engine's identity.
+ */
+  void ChessEngine::getOptions() {
+    // Get the identity.
+    send("uci");
+    bool eof = false;
+
+    do {
+      std::string line = getResponse(eof);
+      auto lines = split_s(line, ' ');
+      if(!eof) {
+        if(lines.size() != 0) {
+          if(lines[0] != "uciok") {
+            if(lines[0] == "option") {
+              fmt::print("{} {} {}\n", lines[0], lines[1], lines[2]);
+            }
+          }
+          else {
+            eof = true;
+          }
+        }
+      }
+    } while(!eof);
   }
 
   /*
@@ -237,7 +275,7 @@ namespace ucichess {
   //   }
   // }
 
-  bool ChessEngine::initEngine() {
+  bool ChessEngine::init() {
     // this->variations = variations;
     this->searchDepth = 10;
 
@@ -249,7 +287,7 @@ namespace ucichess {
       return false;
     }
     else if(waitForResponse("uciok")) {
-
+      getOptions();
       // setOption("UCI_AnalyseMode", "true");
       // setOption("MultiPV", variations);
 

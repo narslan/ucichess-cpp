@@ -1,6 +1,5 @@
 
 ###### cui chess
-find_package(fmt)
 
 
 list(APPEND TESTS_UCI uci_test engine_spin_test unifex_test stdexec_test stdexec_hello)
@@ -11,7 +10,7 @@ foreach(test IN LISTS TESTS_UCI)
                 CXX_STANDARD 20
                 CXX_STANDARD_REQUIRED ON
         )
-        target_link_libraries(${test} ${project_name} fmt::fmt expected-lite unifex stdexec)
+        target_link_libraries(${test} ${project_name})
         add_dependencies(${test} ${project_name})
 endforeach()
 
@@ -19,6 +18,7 @@ endforeach()
 
 
 ###### ux
+find_package(fmt)
 
 list(APPEND TESTS handling_mono_client handling_multiple_clients)
 

@@ -4,8 +4,8 @@
 #include "../ux/process.hpp"
 #include "nonstd/expected.hpp"
 
-#include <map>
 #include <string>
+#include <unordered_map>
 
 namespace ucichess {
   using f = ux::File;
@@ -32,7 +32,8 @@ namespace ucichess {
     void setOption(const std::string& name, const std::string& value);
     void setOption(const std::string& name, int value);
     //void setOptions(std::map<std::string, std::string>& options);
-    void obtainEvaluations(void);
+    void obtainEvaluations();
+    void getOptions();
     std::string bestMove();
     void isready();
 
@@ -40,11 +41,14 @@ namespace ucichess {
     void quit();
 
     private:
-    // member functions.
+    // private member functions.
+
     bool init();
 
     //members.
+
     std::string m_path;
+    std::unordered_map<std::string, std::string> options;
     int searchDepth;
     p m_child_process;
     f m_pipe_write; // write part, todo, remove
