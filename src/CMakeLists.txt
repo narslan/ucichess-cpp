@@ -25,7 +25,7 @@ set_target_properties(${project_name} PROPERTIES
             CXX_EXTENSIONS OFF
             CXX_STANDARD_REQUIRED ON
 )
-target_link_libraries(${project_name} fmt::fmt expected-lite unifex stdexec)
+target_link_libraries(${project_name} fmt::fmt)
 
 target_include_directories(${project_name}
         PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>

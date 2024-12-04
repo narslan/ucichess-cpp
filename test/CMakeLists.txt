@@ -2,7 +2,7 @@
 ###### cui chess
 
 
-list(APPEND TESTS_UCI uci_test engine_spin_test unifex_test stdexec_test stdexec_hello)
+list(APPEND TESTS_UCI uci_test)
 
 foreach(test IN LISTS TESTS_UCI)
         add_executable(${test} "ucichess/${test}.cpp" )
