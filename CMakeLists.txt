@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.30)
 
 set(project_name ucichess) 
 
-project(${project_name} VERSION 0.9.3 DESCRIPTION "UCI chess protocol adapter")
+project(${project_name} VERSION 0.9.6 DESCRIPTION "UCI chess protocol adapter")
 
 add_subdirectory(src)
 add_subdirectory(external)
