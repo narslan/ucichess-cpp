@@ -8,7 +8,7 @@ namespace ucichess {
   };
 
   void UCIGo(ChessEngine& ce) {
-    ce.go();
+    ce.go(10);
     ce.obtainEvaluations();
   };
   void UCIBest(ChessEngine& ce) {

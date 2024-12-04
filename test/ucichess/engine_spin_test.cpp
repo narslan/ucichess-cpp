@@ -8,6 +8,7 @@ using namespace std::literals;
 auto spin_engine(std::string path) -> expected<std::string, std::string> {
   ucichess::ChessEngine e{path};
 
+  //e.setOption("MultiPV", 3);
   std::string bm = e.bestMove();
 
   if(bm != "a3") {

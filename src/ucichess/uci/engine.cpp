@@ -195,7 +195,8 @@ namespace ucichess {
         if(lines.size() != 0) {
           if(lines[0] != "uciok") {
             if(lines[0] == "option") {
-              fmt::print("{} {} {}\n", lines[0], lines[1], lines[2]);
+              //no op
+              //fmt::print("{} {} {}\n", lines[0], lines[1], lines[2]);
             }
           }
           else {
@@ -221,7 +222,7 @@ namespace ucichess {
     // return !eof && response.compare("readyok") == 0;
   }
 
-  void ChessEngine::go() {
+  void ChessEngine::go(int searchDepth) {
     std::stringstream ss;
     ss << "go depth " << searchDepth;
     send(ss.str());
@@ -277,7 +278,6 @@ namespace ucichess {
 
   bool ChessEngine::init() {
     // this->variations = variations;
-    this->searchDepth = 10;
 
     send("uci");
     // printf("hallo outside da loop");
@@ -287,7 +287,7 @@ namespace ucichess {
       return false;
     }
     else if(waitForResponse("uciok")) {
-      getOptions();
+      //getOptions();
       // setOption("UCI_AnalyseMode", "true");
       // setOption("MultiPV", variations);
 
@@ -320,12 +320,11 @@ namespace ucichess {
  * Extract the information from an info line returned
  * by the engine.
  */
-  void extractInfo(std::string& info, std::vector<std::string> infoTokens, int searchDepth) {
+  void extractInfo(std::string& info, std::vector<std::string> infoTokens) {
 
     if("info" != infoTokens[0]) {
       throw std::runtime_error("tokens doesnt have info");
     };
-
     if((info.find("multipv ") != std::string::npos) || (info.find("nodes ") != std::string::npos)) {
       if((info.find("cp ") != std::string::npos)) {
         int numTokens = infoTokens.size();
@@ -335,11 +334,11 @@ namespace ucichess {
         }
         if(t < numTokens) {
           int depth = std::stoi(infoTokens[t + 1]);
-          if(depth == searchDepth) {
-
-            //Evaluation* ev = new Evaluation(infoTokens, info);
-            //saveEvaluation(ev, info);
-          }
+          //  if(depth == searchDepth) {
+          fmt::print("{}\n", info);
+          //Evaluation* ev = new Evaluation(infoTokens, info);
+          //saveEvaluation(ev, info);
+          //}
         }
       }
     }
@@ -362,7 +361,7 @@ namespace ucichess {
       std::string tokenType = tokens[0];
       if(!eof && reply.size() > 13) {
         if(tokenType == "info") {
-          extractInfo(reply, tokens, searchDepth);
+          extractInfo(reply, tokens);
         }
         else if(tokenType == "bestmove") {
           bestMoveFound = true;
@@ -375,7 +374,7 @@ namespace ucichess {
   }
 
   std::string ChessEngine::bestMove() {
-    go();
+    go(10);
     std::string reply;
     std::string bestmove;
     std::vector<std::string> tokens;
@@ -393,7 +392,7 @@ namespace ucichess {
       std::string tokenType = tokens[0];
       if(!eof && reply.size() > 13) {
         if(tokenType == "info") {
-          extractInfo(reply, tokens, searchDepth);
+          extractInfo(reply, tokens);
         }
         else if(tokenType == "bestmove") {
           bestmove = tokens[1];

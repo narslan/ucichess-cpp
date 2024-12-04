@@ -19,7 +19,7 @@ namespace ucichess {
     p wait();
 
     //API 2:
-    void go();
+    void go(int searchDepth);
     bool waitForResponse(const char* str);
     std::string getResponse(bool& eof);
 
@@ -49,7 +49,7 @@ namespace ucichess {
 
     std::string m_path;
     std::unordered_map<std::string, std::string> options;
-    int searchDepth;
+
     p m_child_process;
     f m_pipe_write; // write part, todo, remove
     f m_pipe_read; // read part, todo remove
