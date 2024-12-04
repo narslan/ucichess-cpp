@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdio>
+#include <fmt/core.h>
 #include <poll.h>
 #include <sys/select.h>
 #include <sys/uio.h>
@@ -11,15 +12,16 @@ namespace ux {
     int fd_;
 
     public:
-    ~File() {
-      if(fd_ != -1) {
-        close();
-      }
-    };
-
+    ~File() = default;
+    // {
+    //         // if(fd_ != -1) {
+    //         //   fmt::print("close {}\n", fd_);
+    //         //   close();
+    //         // }
+    //     }
     // namespace ux
 
-    explicit File(int f)
+    explicit File(int f = -1)
         : fd_(f) { }
 
     void set(int f) {

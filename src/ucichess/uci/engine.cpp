@@ -24,14 +24,13 @@ namespace ucichess {
 
   ChessEngine::ChessEngine(const std::string& path)
       : m_path{path} {
-    ux::File parentToChild1 = f{-1};
-    ux::File parentToChild2 = f{-1};
-    ux::File childToParent1 = f{-1};
-    ux::File childToParent2 = f{-1};
+    ux::File parentToChild1;
+    ux::File parentToChild2;
+    ux::File childToParent1;
+    ux::File childToParent2;
 
     EC_CATCH(f::pipe(parentToChild1, parentToChild2));
     EC_CATCH(f::pipe(childToParent1, childToParent2));
-    // EC_CATCH(f::pipe(sfd));
 
     p pid = p::fork();
     switch(pid) {
@@ -43,16 +42,16 @@ namespace ucichess {
       childToParent2.dup2(STDOUT_FILENO);
       parentToChild2.close();
       childToParent1.close();
-      //read(STDIN_FILENO);
 
       EC_CATCH(p::execlp(path));
       parentToChild1.close();
       childToParent2.close();
-
     default: // parent.
+
       parentToChild1.close();
       childToParent2.close();
-
+      fmt::print("{}\n", childToParent2);
+      fmt::print("{}\n", parentToChild1);
       fromEngine = ::fdopen(childToParent1, "r");
       toEngine = ::fdopen(parentToChild2, "w");
 
@@ -93,14 +92,17 @@ namespace ucichess {
     //cout << "# get response" << endl;
     eof = false;
     while(!endOfLine && !eof) {
+
       if(*buffer == '\0') {
 
         char* readResult = ::fgets(buffer, MAXBUFF, fromEngine);
+
         if(readResult == NULL) {
           eof = true;
         }
       }
       if(!eof) {
+
         // Look for the end of the line, which might not have been read.
         // NB: There is a boundary error possible here, where a \n\r combination
         // is split across two reads. If that happens then the second char will be
@@ -134,7 +136,7 @@ namespace ucichess {
       }
     }
     if(!eof) {
-      fmt::print("eooofff\n");
+      //fmt::print("eooofff\n");
       //cout << "# [" << result << "]" << endl;
     }
     return result;
@@ -185,9 +187,6 @@ namespace ucichess {
     return identitySet;
   }
 
-  /* Look for "id name" in the engine's initial output and use it
- * to set the engine's identity.
- */
   void ChessEngine::getOptions() {
     // Get the identity.
     send("uci");
@@ -201,7 +200,7 @@ namespace ucichess {
           if(lines[0] != "uciok") {
             if(lines[0] == "option") {
               //no op
-              fmt::print("{} {} {}\n", lines[0], lines[1], lines[2]);
+              fmt::print("{}\n", line);
             }
           }
           else {
@@ -284,26 +283,28 @@ namespace ucichess {
   bool ChessEngine::init() {
     // this->variations = variations;
 
-    send("uci");
-    // printf("hallo outside da loop");
-    if(!setIdentity()) {
-      std::cerr << "Failed to identify the engine." << std::endl;
-      std::cerr << "No \"id name\" found." << std::endl;
-      return false;
-    }
-    else if(waitForResponse("uciok")) {
-      getOptions();
-      // setOption("UCI_AnalyseMode", "true");
-      // setOption("MultiPV", variations);
+    getOptions();
+    return true;
+    // send("uci");
+    // // printf("hallo outside da loop");
+    // if(!setIdentity()) {
+    //   std::cerr << "Failed to identify the engine." << std::endl;
+    //   std::cerr << "No \"id name\" found." << std::endl;
+    //   return false;
+    // }
+    // else if(waitForResponse("uciok")) {
+    //   getOptions();
+    //   // setOption("UCI_AnalyseMode", "true");
+    //   // setOption("MultiPV", variations);
 
-      // Set command-line options.
-      //setOptions(options);
+    //   // Set command-line options.
+    //   //setOptions(options);
 
-      return checkIsReady();
-    }
-    else {
-      return false;
-    }
+    //   return checkIsReady();
+    // }
+    // else {
+    //   return false;
+    // }
   }
 
   /*

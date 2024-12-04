@@ -12,7 +12,7 @@ namespace ux {
     int pfd[2];
 
     if(::pipe(pfd) == -1)
-      throw Error(errno);
+      throw Error(errno, EC_PIPE);
     pf1.set(pfd[0]);
     pf2.set(pfd[1]);
   }
@@ -20,9 +20,9 @@ namespace ux {
   /**
 	Calls close.
 */
-  void File::close(void) {
+  void File::close() {
     if(::close(fd_) == -1)
-      throw Error(errno);
+      throw Error(errno, EC_CLOSE);
   }
 
   /**

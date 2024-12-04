@@ -40,6 +40,10 @@ const char* Error::what() const throw() {
     return gai_strerror(get_code());
   case EC_RESOURCE:
     return "who is invalid";
+  case EC_PIPE:
+    return "pipe call is invalid";
+  case EC_CLOSE:
+    return "close call is invalid";
   default:
     return gai_strerror(get_code());
   }

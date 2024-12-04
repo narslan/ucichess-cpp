@@ -13,7 +13,9 @@ namespace ucichess {
   class ChessEngine {
     public:
     ChessEngine(const std::string& path);
-    ~ChessEngine() = default;
+    ~ChessEngine() {
+      quit();
+    };
 
     p wait();
 

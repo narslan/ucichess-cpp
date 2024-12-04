@@ -29,7 +29,9 @@ typedef enum {
   EC_GETDATE = 2,
   EC_NONE = 3,
   EC_RESOURCE = 4,
-  EC_FCNTL = 5
+  EC_FCNTL = 5,
+  EC_PIPE = 6,
+  EC_CLOSE = 7,
 } EC_ERRTYPE;
 
 #define EC_CAUGHT(e) ec_push(__func__, __FILE__, __LINE__, "EC_CAUGHT", e.get_code());
