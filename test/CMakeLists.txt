@@ -3,7 +3,7 @@
 find_package(fmt)
 
 
-list(APPEND TESTS_UCI uci_test engine_spin_test async_reader)
+list(APPEND TESTS_UCI uci_test engine_spin_test unifex_test)
 
 foreach(test IN LISTS TESTS_UCI)
         add_executable(${test} "ucichess/${test}.cpp" )
@@ -11,7 +11,7 @@ foreach(test IN LISTS TESTS_UCI)
                 CXX_STANDARD 20
                 CXX_STANDARD_REQUIRED ON
         )
-        target_link_libraries(${test} ${project_name} fmt::fmt expected-lite)
+        target_link_libraries(${test} ${project_name} fmt::fmt expected-lite unifex)
         add_dependencies(${test} ${project_name})
 endforeach()
 
