@@ -141,10 +141,9 @@ namespace ux {
   class Socket : public File {
 
     public:
-    Socket(int f = -1, const char* p = NULL, ssize_t s = -1)
-        : File(f, p, s) { }
-    Socket(const char* p, ssize_t s = -1)
-        : File(-1, p, s) { }
+    Socket(int f)
+        : File(f) { }
+
     Socket accept(SockAddr* sa = NULL);
     void connect(const SockAddr& sa);
     void bind(const SockAddr& sa);

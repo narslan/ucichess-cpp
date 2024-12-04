@@ -14,7 +14,7 @@ int main(int argc, const char** argv) {
   ux::SockAddrUn sa{SOCKETNAME};
 
   if(ux::Process::fork() == 0) { /* in child*/
-    ux::Socket fd_skt{};
+    ux::Socket fd_skt{-1};
     fd_skt.socket();
     fd_skt.connect(sa);
     std::string h{"Hello"};
@@ -25,7 +25,7 @@ int main(int argc, const char** argv) {
     exit(EXIT_SUCCESS);
   }
   else { /*in parent*/
-    ux::Socket fd_skt{};
+    ux::Socket fd_skt{-1};
     fd_skt.socket();
     fd_skt.bind(sa);
     fd_skt.listen(SOMAXCONN);

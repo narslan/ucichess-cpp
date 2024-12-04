@@ -180,7 +180,7 @@ void SockAddr::set_server(const char* nodename, const char* servname) {
 	Calls socket.
 */
 void Socket::socket(int domain, int type, int protocol) {
-  if((fd = ::socket(domain, type, protocol)) == -1)
+  if((fd_ = ::socket(domain, type, protocol)) == -1)
     throw Error(errno);
 }
 
@@ -188,7 +188,7 @@ void Socket::socket(int domain, int type, int protocol) {
 	Calls bind.
 */
 void Socket::bind(const SockAddr& sa) {
-  if(::bind(fd, sa.get_addr(), sa.get_len()) == -1)
+  if(::bind(fd_, sa.get_addr(), sa.get_len()) == -1)
     throw Error(errno);
 }
 
@@ -196,7 +196,7 @@ void Socket::bind(const SockAddr& sa) {
 	Calls listen.
 */
 void Socket::listen(int backlog) {
-  if(::listen(fd, backlog) == -1)
+  if(::listen(fd_, backlog) == -1)
     throw Error(errno);
 }
 
@@ -207,9 +207,9 @@ Socket Socket::accept(SockAddr* sa) {
   int r;
 
   if(sa == NULL)
-    r = ::accept(fd, NULL, NULL);
+    r = ::accept(fd_, NULL, NULL);
   else
-    r = ::accept(fd, sa->get_addr(), sa->get_len_ptr());
+    r = ::accept(fd_, sa->get_addr(), sa->get_len_ptr());
   if(r == -1)
     throw Error(errno);
   return Socket(r);
@@ -219,7 +219,7 @@ Socket Socket::accept(SockAddr* sa) {
 	Calls connect.
 */
 void Socket::connect(const SockAddr& sa) {
-  if(::connect(fd, sa.get_addr(), sa.get_len()) == -1)
+  if(::connect(fd_, sa.get_addr(), sa.get_len()) == -1)
     throw Error(errno);
 }
 
@@ -227,7 +227,7 @@ void Socket::connect(const SockAddr& sa) {
 	Calls setsockopt.
 */
 void Socket::setsockopt(int level, int option, const void* value, socklen_t value_len) {
-  if(::setsockopt(fd, level, option, value, value_len) == -1)
+  if(::setsockopt(fd_, level, option, value, value_len) == -1)
     throw Error(errno);
 }
 
@@ -235,7 +235,7 @@ void Socket::setsockopt(int level, int option, const void* value, socklen_t valu
 	Calls getsockopt.
 */
 void Socket::getsockopt(int level, int option, void* value, socklen_t& value_len) {
-  if(::getsockopt(fd, level, option, value, &value_len) == -1)
+  if(::getsockopt(fd_, level, option, value, &value_len) == -1)
     throw Error(errno);
 }
 
@@ -246,7 +246,7 @@ ssize_t Socket::sendto(
     const void* message, size_t length, int flags, const struct sockaddr* sa, socklen_t sa_len) {
   ssize_t n;
 
-  if((n = ::sendto(fd, message, length, flags, sa, sa_len)) == -1)
+  if((n = ::sendto(fd_, message, length, flags, sa, sa_len)) == -1)
     throw Error(errno);
   return n;
 }
@@ -258,7 +258,7 @@ ssize_t
 Socket::recvfrom(void* buffer, size_t length, int flags, struct sockaddr* sa, socklen_t* sa_len) {
   ssize_t n;
 
-  if((n = ::recvfrom(fd, buffer, length, flags, sa, sa_len)) == -1)
+  if((n = ::recvfrom(fd_, buffer, length, flags, sa, sa_len)) == -1)
     throw Error(errno);
   return n;
 }
@@ -269,7 +269,7 @@ Socket::recvfrom(void* buffer, size_t length, int flags, struct sockaddr* sa, so
 ssize_t Socket::sendmsg(const struct msghdr* message, int flags) {
   ssize_t n;
 
-  if((n = ::sendmsg(fd, message, flags)) == -1)
+  if((n = ::sendmsg(fd_, message, flags)) == -1)
     throw Error(errno);
   return n;
 }
@@ -280,7 +280,7 @@ ssize_t Socket::sendmsg(const struct msghdr* message, int flags) {
 ssize_t Socket::recvmsg(struct msghdr* message, int flags) {
   ssize_t n;
 
-  if((n = ::recvmsg(fd, message, flags)) == -1)
+  if((n = ::recvmsg(fd_, message, flags)) == -1)
     throw Error(errno);
   return n;
 }
@@ -291,7 +291,7 @@ ssize_t Socket::recvmsg(struct msghdr* message, int flags) {
 ssize_t Socket::send(const void* data, size_t length, int flags) {
   ssize_t n;
 
-  if((n = ::send(fd, data, length, flags)) == -1)
+  if((n = ::send(fd_, data, length, flags)) == -1)
     throw Error(errno);
   return n;
 }
@@ -302,7 +302,7 @@ ssize_t Socket::send(const void* data, size_t length, int flags) {
 ssize_t Socket::recv(void* buffer, size_t length, int flags) {
   ssize_t n;
 
-  if((n = ::recv(fd, buffer, length, flags)) == -1)
+  if((n = ::recv(fd_, buffer, length, flags)) == -1)
     throw Error(errno);
   return n;
 }
@@ -310,7 +310,7 @@ ssize_t Socket::recv(void* buffer, size_t length, int flags) {
 	Calls getpeername.
 */
 void Socket::getpeername(SockAddr& sa) {
-  if(::getpeername(fd, sa.get_addr(), sa.get_len_ptr()) == -1)
+  if(::getpeername(fd_, sa.get_addr(), sa.get_len_ptr()) == -1)
     throw Error(errno);
 }
 
@@ -318,7 +318,7 @@ void Socket::getpeername(SockAddr& sa) {
 	Calls getsockname.
 */
 void Socket::getsockname(SockAddr& sa) {
-  if(::getsockname(fd, sa.get_addr(), sa.get_len_ptr()) == -1)
+  if(::getsockname(fd_, sa.get_addr(), sa.get_len_ptr()) == -1)
     throw Error(errno);
 }
 
@@ -338,7 +338,7 @@ void Socket::getsockname(SockAddr& sa) {
 	Calls shutdown.
 */
 void Socket::shutdown(int how) {
-  if(::shutdown(fd, how) == -1)
+  if(::shutdown(fd_, how) == -1)
     throw Error(errno);
 }
 
@@ -349,7 +349,7 @@ bool Socket::sockatmark(void) {
 #if _XOPEN_VERSION >= 600
   int r;
 
-  if((r = ::sockatmark(fd)) == -1)
+  if((r = ::sockatmark(fd_)) == -1)
     throw Error(errno);
   return r == 1;
 #else

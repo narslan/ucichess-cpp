@@ -24,10 +24,13 @@ namespace ucichess {
 
   ChessEngine::ChessEngine(const std::string& path)
       : m_path{path} {
-    f parentToChild[2];
-    f childToParent[2];
-    EC_CATCH(f::pipe(parentToChild));
-    EC_CATCH(f::pipe(childToParent));
+    ux::File parentToChild1 = f{-1};
+    ux::File parentToChild2 = f{-1};
+    ux::File childToParent1 = f{-1};
+    ux::File childToParent2 = f{-1};
+
+    EC_CATCH(f::pipe(parentToChild1, parentToChild2));
+    EC_CATCH(f::pipe(childToParent1, childToParent2));
     // EC_CATCH(f::pipe(sfd));
 
     p pid = p::fork();
@@ -36,24 +39,23 @@ namespace ucichess {
       ux::Error(errno, EC_RESOURCE);
     case 0: // child.
 
-      parentToChild[0].dup2(STDIN_FILENO);
-      childToParent[1].dup2(STDOUT_FILENO);
-      parentToChild[1].close();
-      childToParent[0].close();
+      parentToChild1.dup2(STDIN_FILENO);
+      childToParent2.dup2(STDOUT_FILENO);
+      parentToChild2.close();
+      childToParent1.close();
       //read(STDIN_FILENO);
+
       EC_CATCH(p::execlp(path));
-      parentToChild[0].close();
-      childToParent[1].close();
+      parentToChild1.close();
+      childToParent2.close();
 
     default: // parent.
-      parentToChild[0].close();
-      childToParent[1].close();
-      m_child_process = pid;
+      parentToChild1.close();
+      childToParent2.close();
 
-      m_pipe_write = parentToChild[1];
-      m_pipe_read = childToParent[0];
-      fromEngine = ::fdopen(childToParent[0].fd, "r");
-      toEngine = ::fdopen(parentToChild[1].fd, "w");
+      fromEngine = ::fdopen(childToParent1, "r");
+      toEngine = ::fdopen(parentToChild2, "w");
+
       init();
     }
   };
@@ -87,6 +89,7 @@ namespace ucichess {
     // What is returned.
     std::string result;
     bool endOfLine = false;
+
     //cout << "# get response" << endl;
     eof = false;
     while(!endOfLine && !eof) {
@@ -131,6 +134,7 @@ namespace ucichess {
       }
     }
     if(!eof) {
+      fmt::print("eooofff\n");
       //cout << "# [" << result << "]" << endl;
     }
     return result;
@@ -162,12 +166,13 @@ namespace ucichess {
   /* Look for "id name" in the engine's initial output and use it
  * to set the engine's identity.
  */
-  bool ChessEngine::setIdentity(void) {
+  bool ChessEngine::setIdentity() {
     // Get the identity.
     const char* id_prefix = "id name ";
     bool eof, identitySet = false;
 
     do {
+      fmt::print("heyyy!\n");
       std::string idResponse = getResponse(eof);
       fmt::print("{}\n", idResponse);
       if(!eof) {
@@ -196,7 +201,7 @@ namespace ucichess {
           if(lines[0] != "uciok") {
             if(lines[0] == "option") {
               //no op
-              //fmt::print("{} {} {}\n", lines[0], lines[1], lines[2]);
+              fmt::print("{} {} {}\n", lines[0], lines[1], lines[2]);
             }
           }
           else {
@@ -287,7 +292,7 @@ namespace ucichess {
       return false;
     }
     else if(waitForResponse("uciok")) {
-      //getOptions();
+      getOptions();
       // setOption("UCI_AnalyseMode", "true");
       // setOption("MultiPV", variations);
 

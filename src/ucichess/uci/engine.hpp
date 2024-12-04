@@ -50,8 +50,7 @@ namespace ucichess {
     std::unordered_map<std::string, std::string> options;
 
     p m_child_process;
-    f m_pipe_write; // write part, todo, remove
-    f m_pipe_read; // read part, todo remove
+
     FILE* fromEngine;
     FILE* toEngine;
   };

@@ -6,37 +6,37 @@ const char* SOCKETNAME = "MySocket";
 bool run_server(ux::SockAddrUn& sa) {
 
   int fd_hwm{}; //?
-  ux::Socket fd_client;
-  ux::Socket fd_skt{};
+
+  ux::Socket fd_skt{-1};
   fd_skt.socket();
   fd_skt.bind(sa);
   fd_skt.listen(SOMAXCONN);
 
   if(fd_skt > fd_hwm)
-    fd_hwm = fd_skt.fd;
+    fd_hwm = fd_skt;
   //for select;
   fd_set set, read_set;
   FD_ZERO(&set);
-  FD_SET(fd_skt.fd, &set);
+  FD_SET(fd_skt, &set);
 
   while(true) {
     read_set = set;
     ux::File::select(fd_hwm + 1, &read_set, nullptr, nullptr, nullptr);
     for(int fdi = 0; fdi < fd_hwm; fdi++) {
       ux::File fd{fdi};
-      if(FD_ISSET(fd.fd, &read_set)) {
-        if(fd == fd_skt.fd) {
-          fd_client = fd_skt.accept();
-          FD_SET(fd_client.fd, &set);
+      if(FD_ISSET(fd, &read_set)) {
+        if(fd == fd_skt) {
+          auto fd_client = fd_skt.accept();
+          FD_SET(fd_client, &set);
           if(fd_client > fd_hwm)
-            fd_hwm = fd_client.fd;
+            fd_hwm = fd_client;
         }
       }
       else {
         char buf[100];
         int nread = fd.read(buf, sizeof(buf));
         if(nread == 0) {
-          FD_CLR(fd.fd, &set);
+          FD_CLR(fd, &set);
           if(fd == fd_hwm)
             fd_hwm--;
           fd.close();
@@ -54,7 +54,7 @@ bool run_server(ux::SockAddrUn& sa) {
 
 static bool run_client(ux::SockAddrUn& sa) {
   if(ux::Process::fork() == 0) {
-    ux::Socket fd_skt{};
+    ux::Socket fd_skt{-1};
     char buf[100];
     fd_skt.socket();
     fd_skt.connect(sa);

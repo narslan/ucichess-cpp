@@ -7,32 +7,39 @@
 #include <utime.h>
 namespace ux {
   class File {
-    public:
-    ~File() = default;
+    protected:
+    int fd_;
 
-    File(int f = -1, const char* p = nullptr, ssize_t s = -1)
-        : fd(f)
-        , path(p)
-        , size(s) { }
-    File(const char* p, ssize_t s = -1)
-        : fd(-1)
-        , path(p)
-        , size(s) { }
-    void set(int f = -1, char* p = nullptr, ssize_t s = -1) {
-      fd = f;
-      path = p;
-      size = s;
+    public:
+    ~File() {
+      if(fd_ != -1) {
+        close();
+      }
+    };
+
+    // namespace ux
+
+    explicit File(int f)
+        : fd_(f) { }
+
+    void set(int f) {
+      fd_ = f;
     }
-    void set(char* p, ssize_t s = -1) {
-      fd = -1;
-      path = p;
-      size = s;
+
+    File(const File&) = delete;
+    File& operator=(const File&) = delete;
+    bool ok() const {
+      return fd_ != -1;
+    }
+
+    operator int() const {
+      return fd_;
     }
 
     void close(void);
     File dup(void);
     File dup2(int fd2);
-    static void pipe(File pf[2]);
+    static void pipe(File& pf1, File& pf2);
     ssize_t read(void* buf, size_t nbytes, off_t offset = -1);
     ssize_t readv(const struct iovec* iov, int iovcnt);
 
@@ -51,17 +58,6 @@ namespace ux {
                        const struct timespec* timeout = NULL,
                        const sigset_t* sigmask = NULL);
     static int poll(struct pollfd fdinfo[], nfds_t nfds, int timeout = -1);
-
-    // to enable comparing File objects with int handles.
-    bool operator<(const int& rhs);
-    bool operator>(const int& rhs);
-    bool operator==(const int& rhs);
-
-    File& operator++();
-    File operator++(int);
-    int fd;
-    const char* path;
-    ssize_t size;
   };
 
 } // namespace ux
