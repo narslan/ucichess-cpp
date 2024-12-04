@@ -1,4 +1,6 @@
-#include "../../src/ucichess/ux/ux.hpp"
+#include "../../src/ucichess/ux/process.hpp"
+#include "../../src/ucichess/ux/socket.hpp"
+
 const char* SOCKETNAME = "MySocket";
 
 bool run_server(ux::SockAddrUn& sa) {

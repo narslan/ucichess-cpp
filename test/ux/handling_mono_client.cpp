@@ -1,4 +1,5 @@
-#include "../../src/ucichess/ux/ux.hpp"
+#include "../../src/ucichess/ux/process.hpp"
+#include "../../src/ucichess/ux/socket.hpp"
 #include <cstdlib>
 #include <sys/socket.h>
 #include <unistd.h>

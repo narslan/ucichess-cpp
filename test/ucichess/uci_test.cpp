@@ -1,5 +1,5 @@
 #include "../../src/ucichess/uci/command.hpp"
-#include "../../src/ucichess/uci/process.hpp"
+#include "../../src/ucichess/uci/engine.hpp"
 
 #include <algorithm>
 #include <fmt/core.h>

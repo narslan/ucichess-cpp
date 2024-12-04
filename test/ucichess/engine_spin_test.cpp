@@ -1,17 +1,13 @@
-#include "../../src/ucichess/uci/process.hpp"
+#include "../../src/ucichess/uci/engine.hpp"
 #include "nonstd/expected.hpp"
 #include <fmt/core.h>
 #include <string>
 using namespace nonstd;
 using namespace std::literals;
 
-auto spin_engine(std::string path) -> expected<std::string, std::string>
-{
+auto spin_engine(std::string path) -> expected<std::string, std::string> {
   ucichess::ChessEngine e{path};
 
-  std::map<std::string, std::string> options;
-
-  e.initEngine(10, options);
   std::string bm = e.bestMove();
 
   if(bm != "a3") {
@@ -24,8 +20,7 @@ auto spin_engine(std::string path) -> expected<std::string, std::string>
   }
 }
 
-int main()
-{
+int main() {
 
   auto es = spin_engine("stockfish");
   if(es)

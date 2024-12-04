@@ -2,6 +2,8 @@
 
 #include "../ux/file.hpp"
 #include "../ux/process.hpp"
+#include "nonstd/expected.hpp"
+
 #include <map>
 #include <string>
 
@@ -20,7 +22,7 @@ namespace ucichess {
     void go();
     bool waitForResponse(const char* str);
     std::string getResponse(bool& eof);
-    bool initEngine();
+
     void send(const std::string& str);
     void send(const char* str);
     bool setIdentity();
@@ -29,7 +31,7 @@ namespace ucichess {
     void setFENPosition(const std::string& fenstring, const std::string& moves);
     void setOption(const std::string& name, const std::string& value);
     void setOption(const std::string& name, int value);
-    void setOptions(std::map<std::string, std::string>& options);
+    //void setOptions(std::map<std::string, std::string>& options);
     void obtainEvaluations(void);
     std::string bestMove();
     void isready();
@@ -38,8 +40,11 @@ namespace ucichess {
     void quit();
 
     private:
-    std::string m_path;
+    // member functions.
+    bool init();
 
+    //members.
+    std::string m_path;
     int searchDepth;
     p m_child_process;
     f m_pipe_write; // write part, todo, remove

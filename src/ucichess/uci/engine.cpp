@@ -230,12 +230,12 @@ namespace ucichess {
     setOption(name, ss.str());
   }
 
-  void ChessEngine::setOptions(std::map<std::string, std::string>& options) {
-    std::map<std::string, std::string>::iterator it;
-    for(it = options.begin(); it != options.end(); it++) {
-      setOption(it->first, it->second);
-    }
-  }
+  // void ChessEngine::setOptions(std::map<std::string, std::string>& options) {
+  //   std::map<std::string, std::string>::iterator it;
+  //   for(it = options.begin(); it != options.end(); it++) {
+  //     setOption(it->first, it->second);
+  //   }
+  // }
 
   bool ChessEngine::initEngine() {
     // this->variations = variations;
