@@ -21,4 +21,5 @@ namespace ucichess {
   void UCIPosition(ChessEngine& ce, const StrArgs args){};
   void UCISetOption(ChessEngine& ce, const StrArgs args){};
   void UCIStop(ChessEngine& ce, const StrArgs args){};
+
 } // namespace ucichess

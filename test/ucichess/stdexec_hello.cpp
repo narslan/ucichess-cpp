@@ -20,7 +20,7 @@ int main() {
         std::cout << "Hello world! Have an int.\n"; // 3
         return 13; // 3
       }); // 3
-      //
+
   sender auto add_42 = then(hi_again, [](int arg) { return arg + 42; }); // 4
   auto [i] = sync_wait(std::move(add_42)).value(); // 5
   std::cout << "Result: " << i << std::endl;

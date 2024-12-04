@@ -21,7 +21,11 @@ namespace ucichess {
   void UCIStop(ChessEngine& ce, const StrArgs args);
   void UCIBest(ChessEngine& ce, const StrArgs args);
 
-  const std::vector<command> uci_commands{
+  const std::string kEngineIsReady = "isready";
+  const std::string kEngineNamePrefix = "id name ";
+  const std::string kEngineAuthorPrefix = "id author ";
+  const std::string kOk = "uciok";
+  static std::vector<command> uci_commands{
       // UCI Commands
       {"go", UCIGo},
       {"quit", UCIQuit},
@@ -31,10 +35,4 @@ namespace ucichess {
       {"stop", UCIStop},
       {"best", UCIBest},
   };
-
-  const std::string kEngineIsReady = "isready";
-  const std::string kEngineNamePrefix = "id name ";
-  const std::string kEngineAuthorPrefix = "id author ";
-  const std::string kOk = "uciok";
-
 } // namespace ucichess

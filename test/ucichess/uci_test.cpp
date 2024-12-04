@@ -1,12 +1,13 @@
 #include "../../src/ucichess/uci/command.hpp"
 #include "../../src/ucichess/uci/process.hpp"
-#include <iostream>
+
+#include <algorithm>
+#include <fmt/core.h>
 #include <sstream>
 #include <vector>
 
 // split_s is the core machinery. It split s at splitPoint, and returns a vector.
-std::vector<std::string> split_s(const std::string& s, char delimeter)
-{
+std::vector<std::string> split_s(const std::string& s, char delimeter) {
   std::vector<std::string> elements;
   std::stringstream string_stream(s);
   std::string item;
@@ -16,37 +17,49 @@ std::vector<std::string> split_s(const std::string& s, char delimeter)
   return elements;
 }
 
-int main(int argc, const char** argv)
-{
+struct FindByName {
+  const std::string name;
+  FindByName(const char* name)
+      : name(name) { }
+  bool operator()(const ucichess::command& j) const {
+    return j.name == name;
+  }
+};
+
+int main(int argc, const char** argv) {
   ucichess::ChessEngine c{"stockfish"};
   std::map<std::string, std::string> options;
   c.initEngine(10, options);
 
   std::string in;
-  bool quit_flag = false;
 
-  while(!quit_flag && std::getline(std::cin, in)) {
+  while(std::getline(std::cin, in)) {
 
     auto args = split_s(in, ' ');
 
     std::string command = args[0];
+
+    if(command == "quit") {
+      std::vector<ucichess::command>::iterator it = std::find_if(
+          ucichess::uci_commands.begin(), ucichess::uci_commands.end(), FindByName("quit"));
+      fmt::print("fiind quit '{}'\n", command);
+      if(it != ucichess::uci_commands.end()) {
+        it->func(c, {});
+      }
+      break;
+    }
     bool command_found = false;
-    for(ucichess::command uci_command : ucichess::uci_commands) {
+    for(auto uci_command : ucichess::uci_commands) {
 
       if(command == uci_command.name) {
         command_found = true;
-        uci_command.func(c, args);
-        if(command == "quit") {
-          c.quit();
-          quit_flag = true;
-        }
-        else {
-          continue;
-        }
+        fmt::print("uci_command: '{}'\n", uci_command.name);
+        uci_command.func(c, {});
+        continue;
       }
     }
     if(!command_found) {
-      std::cout << "Received unknown command: " << command;
+      fmt::print("command not_found '{}'\n", command);
     }
   }
 
