@@ -13,7 +13,8 @@ namespace ucichess {
   class ChessEngine {
     public:
     ChessEngine(const std::string& path);
-    ~ChessEngine() {
+    ~ChessEngine()
+    {
       quit();
     };
 
@@ -24,7 +25,6 @@ namespace ucichess {
     bool waitForResponse(const char* str);
     std::string getResponse(bool& eof);
 
-    void send(const std::string& str);
     void send(const char* str);
 
     bool checkIsReady();
@@ -38,7 +38,6 @@ namespace ucichess {
     std::string bestMove();
     void isready();
 
-    std::string identity;
     void quit();
 
     private:
