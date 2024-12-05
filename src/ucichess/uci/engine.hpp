@@ -25,7 +25,7 @@ namespace ucichess {
     bool waitForResponse(const char* str);
     std::string getResponse(bool& eof);
 
-    void send(const char* str);
+    void send(std::string const& str);
 
     bool checkIsReady();
     void setPosition(const std::string& moves, const std::string& fenstring);

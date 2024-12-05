@@ -9,9 +9,11 @@
 #include <sys/types.h>
 #include <vector>
 
+using namespace std::string_literals;
+
 namespace ucichess {
   // split_s is the core machinery. It split s at splitPoint, and returns a vector.
-  std::vector<std::string> split_s(const std::string& s, char delimeter)
+  std::vector<std::string> split_s(std::string const& s, char delimeter)
   {
     std::vector<std::string> elements;
     std::stringstream string_stream(s);
@@ -23,7 +25,7 @@ namespace ucichess {
   }
   // printf("read %ld bytes: %s\n", (long)nread, s);
 
-  ChessEngine::ChessEngine(const std::string& path)
+  ChessEngine::ChessEngine(std::string const& path)
       : m_path{path}
   {
     ux::File parentToChild1;
@@ -149,18 +151,18 @@ namespace ucichess {
 
   void ChessEngine::quit()
   {
-    send("quit");
+    send("quit"s);
   }
 
   void ChessEngine::isready()
   {
-    send("isready");
+    send("isread");
   }
 
-  void ChessEngine::send(const char* str)
+  void ChessEngine::send(std::string const& str)
   {
 
-    fprintf(toEngine, "%s\n", str);
+    fprintf(toEngine, "%s\n", str.c_str());
     fflush(toEngine);
   }
 
