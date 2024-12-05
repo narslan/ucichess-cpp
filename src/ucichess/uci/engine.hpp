@@ -39,6 +39,7 @@ namespace ucichess {
     void isready();
 
     void quit();
+    std::pair<std::string, std::string> id();
 
     private:
     // private member functions.

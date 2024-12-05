@@ -68,6 +68,11 @@ namespace ucichess {
     return p::wait(m_child_process);
   }
 
+  std::pair<std::string, std::string> ChessEngine::id()
+  {
+    return m_id;
+  }
+
   /*
  * Wait for the given response from the engine.
  * Return true on success or false on failure (EOF).
