@@ -59,7 +59,7 @@ namespace ucichess {
       fromEngine = ::fdopen(childToParent1, "r");
       toEngine = ::fdopen(parentToChild2, "w");
 
-      init();
+      getOptions();
     }
   };
 
@@ -263,42 +263,6 @@ namespace ucichess {
     std::stringstream ss;
     ss << value;
     setOption(name, ss.str());
-  }
-
-  // void ChessEngine::setOptions(std::map<std::string, std::string>& options) {
-  //   std::map<std::string, std::string>::iterator it;
-  //   for(it = options.begin(); it != options.end(); it++) {
-  //     setOption(it->first, it->second);
-  //   }
-  // }
-
-  bool ChessEngine::init()
-  {
-    // this->variations = variations;
-
-    getOptions();
-
-    return true;
-    // send("uci");
-    // // printf("hallo outside da loop");
-    // if(!setIdentity()) {
-    //   std::cerr << "Failed to identify the engine." << std::endl;
-    //   std::cerr << "No \"id name\" found." << std::endl;
-    //   return false;
-    // }
-    // else if(waitForResponse("uciok")) {
-    //   getOptions();
-    //   // setOption("UCI_AnalyseMode", "true");
-    //   // setOption("MultiPV", variations);
-
-    //   // Set command-line options.
-    //   //setOptions(options);
-
-    //   return checkIsReady();
-    // }
-    // else {
-    //   return false;
-    // }
   }
 
   /*
