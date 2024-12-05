@@ -194,17 +194,23 @@ namespace ucichess {
 
     do {
       std::string line = getResponse(eof);
-      auto lines = split_s(line, ' ');
+      auto tokens = split_s(line, ' ');
       if(!eof) {
-        if(lines.size() != 0) {
-          if(lines[0] != "uciok") {
-            if(lines[0] == "option") {
-              //no op
-              fmt::print("{}\n", line);
-            }
+        if(tokens.size() != 0) {
+          if(tokens[0] == "uciok") {
+            eof = true;
           }
           else {
-            eof = true;
+            // Capture id.
+            if(tokens[0] == "id" && tokens[1] == "name") {
+              m_id.first = tokens.at(2);
+              m_id.second = tokens.at(3);
+              fmt::print("id: {}\n", line);
+            }
+            if(tokens[0] == "option") {
+              //no op
+              fmt::print("op: {}\n", line);
+            }
           }
         }
       }
@@ -284,6 +290,7 @@ namespace ucichess {
     // this->variations = variations;
 
     getOptions();
+
     return true;
     // send("uci");
     // // printf("hallo outside da loop");

@@ -26,7 +26,7 @@ namespace ucichess {
 
     void send(const std::string& str);
     void send(const char* str);
-    bool setIdentity();
+
     bool checkIsReady();
     void setPosition(const std::string& moves, const std::string& fenstring);
     void setFENPosition(const std::string& fenstring, const std::string& moves);
@@ -49,7 +49,11 @@ namespace ucichess {
     //members.
 
     std::string m_path;
-    std::unordered_map<std::string, std::string> options;
+    //std::unordered_map<std::string, std::string> options;
+
+    // m_id represents an id like Stockfish dev-20230218-037ef3e1.
+    // It constructed in getOptions(). It is the version of the engine.
+    std::pair<std::string, std::string> m_id;
 
     p m_child_process;
 
