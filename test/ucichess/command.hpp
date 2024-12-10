@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine.hpp"
+#include "ucichess/uci/engine.hpp"
 #include <string>
 #include <vector>
 namespace ucichess {

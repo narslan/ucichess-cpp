@@ -12,8 +12,6 @@ add_library(${project_name}
             ucichess/ux/socket.hpp
             ucichess/error/error.cpp
             ucichess/error/error.hpp
-            ucichess/uci/command.cpp
-            ucichess/uci/command.hpp 
             ucichess/uci/engine.cpp
             ucichess/uci/engine.hpp
             ucichess/uci/options.cpp

@@ -4,7 +4,8 @@
 #include "../ux/process.hpp"
 
 #include <string>
-#include <unordered_map>
+
+#include <sstream>
 
 namespace ucichess {
   using f = ux::File;
@@ -13,8 +14,7 @@ namespace ucichess {
   class ChessEngine {
     public:
     ChessEngine(const std::string& path);
-    ~ChessEngine()
-    {
+    ~ChessEngine() {
       quit();
     };
 
@@ -30,8 +30,14 @@ namespace ucichess {
     bool checkIsReady();
     void setPosition(const std::string& moves, const std::string& fenstring);
     void setFENPosition(const std::string& fenstring, const std::string& moves);
-    void setOption(const std::string& name, const std::string& value);
-    void setOption(const std::string& name, int value);
+
+    template <typename T>
+    void setOption(const std::string& key, T value) {
+      std::stringstream ss;
+      ss << "setoption name " << key << " value " << value;
+      send(ss.str());
+    };
+
     //void setOptions(std::map<std::string, std::string>& options);
     void obtainEvaluations();
     void getOptions();
