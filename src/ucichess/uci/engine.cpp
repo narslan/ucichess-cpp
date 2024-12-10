@@ -21,7 +21,6 @@ namespace ucichess {
     }
     return elements;
   }
-  // printf("read %ld bytes: %s\n", (long)nread, s);
 
   ChessEngine::ChessEngine(std::string const& path)
       : m_path{path} {
@@ -179,12 +178,12 @@ namespace ucichess {
             if(tokens[0] == "id" && tokens[1] == "name") {
               m_id.first = tokens.at(2);
               m_id.second = tokens.at(3);
-              fmt::print("id: {}\n", line);
+              // fmt::print("id: {}\n", line);
             }
-            if(tokens[0] == "option") {
-              //no op
-              fmt::print("op: {}\n", line);
-            }
+            //if(tokens[0] == "option") {
+            //no op
+            // fmt::print("op: {}\n", line);
+            //}
           }
         }
       }
@@ -264,7 +263,7 @@ namespace ucichess {
         if(t < numTokens) {
           int depth = std::stoi(infoTokens[t + 1]);
           //  if(depth == searchDepth) {
-          fmt::print("{}\n", info);
+          //fmt::print("{}\n", info);
           //Evaluation* ev = new Evaluation(infoTokens, info);
           //saveEvaluation(ev, info);
           //}
