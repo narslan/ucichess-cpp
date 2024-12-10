@@ -28,8 +28,7 @@ namespace ucichess {
     void send(std::string const& str);
 
     bool checkIsReady();
-    void setPosition(const std::string& moves, const std::string& fenstring);
-    void setFENPosition(const std::string& fenstring, const std::string& moves);
+    void setPosition(const std::string& fen, const std::string& moves);
 
     template <typename T>
     void setOption(const std::string& key, T value) {

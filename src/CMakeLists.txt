@@ -14,9 +14,7 @@ add_library(${project_name}
             ucichess/error/error.hpp
             ucichess/uci/engine.cpp
             ucichess/uci/engine.hpp
-            ucichess/uci/options.cpp
-            ucichess/uci/options.hpp
-            )
+                       )
 
 set_target_properties(${project_name} PROPERTIES
             CXX_STANDARD 17

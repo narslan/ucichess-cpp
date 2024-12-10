@@ -203,7 +203,6 @@ namespace ucichess {
     else {
       return false;
     }
-    // return !eof && response.compare("readyok") == 0;
   }
 
   void ChessEngine::go(int searchDepth) {
@@ -212,48 +211,24 @@ namespace ucichess {
     send(ss.str());
   }
 
-  void ChessEngine::setPosition(const std::string& moves, const std::string& fenstring) {
-    if(fenstring.length() == 0) {
-      setFENPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", moves);
-    }
-    else {
-      setFENPosition(fenstring, moves);
-    }
-  }
-
-  void ChessEngine::setFENPosition(const std::string& fenstring, const std::string& moves) {
+  void ChessEngine::setPosition(const std::string& fen, const std::string& moves) {
     std::stringstream ss;
+
+    if(fen == "") {
+      ss << "position startpos";
+      send(ss.str());
+      return;
+    }
+
     if(moves.length() == 0) {
-      ss << "position fen " << fenstring;
+      ss << "position fen " << fen;
       send(ss.str());
     }
     else {
-      ss << "position fen " << fenstring << " moves " + moves;
+      ss << "position fen " << fen << " moves " + moves;
       send(ss.str());
     }
   }
-
-  /*
- * Send a setoption command to the engine using the
- * given name and value.
- */
-  // void ChessEngine::setOption(const std::string& name, const std::string& value) {
-  //   std::stringstream ss;
-  //   ss << "setoption name " << name << " value " << value;
-  //   send(ss.str());
-  // }
-
-  /*
- * Send a setoption command to the engine using the
- * given name and value.
- */
-  // template <typename T>
-  // void ChessEngine::setOption(const std::string& name, std::variant<std::string, int> value) {
-  //   std::stringstream ss;
-  //   ss << "setoption name " << name << " value " << value.;
-
-  //   send(ss.str());
-  // }
 
   /*
  * Tokenise text into tokens.

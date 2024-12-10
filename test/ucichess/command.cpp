@@ -19,7 +19,9 @@ namespace ucichess {
     ce.isready();
   };
   void UCIPosition(ChessEngine& ce){};
-  void UCISetOption(ChessEngine& ce){};
+  void UCISetOption(ChessEngine& ce) {
+    ce.setOption("MultiPV", 3);
+  };
   void UCIInfo(ChessEngine& ce){
       //ce.getOptions();
   };
