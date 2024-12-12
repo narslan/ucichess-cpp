@@ -3,4 +3,4 @@ build/
 compile_commands.json
 frontend/node_modules
 docker/mongodb*
-
+*.zip
