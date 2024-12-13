@@ -1,6 +1,5 @@
 #include <fmt/core.h>
 #include <iostream>
-#include <ranges>
 #include <string_view>
 
 #include "../chess/chess.hpp"

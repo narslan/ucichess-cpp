@@ -43,6 +43,7 @@ namespace ucichess {
     std::string bestMove();
     void isready();
 
+    bool newGame();
     void quit();
     std::pair<std::string, std::string> id();
 

@@ -204,6 +204,14 @@ namespace ucichess {
     }
   }
 
+  /*
+ * Send ucinewgame if a new game happens.
+ */
+  bool ChessEngine::newGame() {
+    send("ucinewgame");
+    return checkIsReady();
+  }
+
   void ChessEngine::go(int searchDepth) {
     std::stringstream ss;
     ss << "go depth " << searchDepth;
