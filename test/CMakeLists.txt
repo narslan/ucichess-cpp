@@ -34,4 +34,18 @@ endforeach()
 
 
 
+## pgn tests
+
+list(APPEND TESTS_PGN pgn_test)
+
+foreach(test IN LISTS TESTS_PGN)
+        add_executable(${test} "pgn/${test}.cpp" )
+        set_target_properties(${test} PROPERTIES
+                CXX_STANDARD 23
+                CXX_STANDARD_REQUIRED ON
+        )
+        target_link_libraries(${test} ${project_name})
+        add_dependencies(${test} ${project_name})
+endforeach()
+
 

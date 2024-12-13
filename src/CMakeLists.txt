@@ -15,9 +15,8 @@ add_library(${project_name}
             ucichess/uci/engine.cpp
             ucichess/uci/engine.hpp
                        )
-
 set_target_properties(${project_name} PROPERTIES
-            CXX_STANDARD 17
+            CXX_STANDARD 20
             CXX_EXTENSIONS OFF
             CXX_STANDARD_REQUIRED ON
 )
