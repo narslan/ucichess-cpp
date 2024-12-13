@@ -37,8 +37,8 @@ int main(int argc, const char** argv) {
 
     std::string command = args[0];
     std::string pa = "";
-    if(args.size() == 3) {
-      pa = args[2];
+    if(args.size() == 2) {
+      pa = args[1];
     }
 
     if(command == "quit") {

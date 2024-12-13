@@ -19,7 +19,7 @@ namespace ucichess {
   void UCIPosition(ChessEngine& ce, std::string param);
   void UCISetOption(ChessEngine& ce, std::string param);
   void UCIInfo(ChessEngine& ce, std::string param);
-  void UCIBest(ChessEngine& ce, std::string param);
+  void UCIBest(ChessEngine& ce, std::string depth);
 
   static std::vector<command> uci_commands{
       // UCI Commands

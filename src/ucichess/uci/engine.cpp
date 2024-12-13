@@ -298,7 +298,7 @@ namespace ucichess {
     } while(!bestMoveFound && !eof);
   }
 
-  std::string ChessEngine::bestMove() {
+  std::string ChessEngine::bestMove(int depth) {
     go(depth);
     std::string reply;
     std::string bestmove;

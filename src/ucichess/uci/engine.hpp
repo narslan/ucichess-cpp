@@ -13,8 +13,8 @@ namespace ucichess {
 
   class ChessEngine {
     public:
-    // Constructors && members
-    unsigned int depth; // default search depth.
+    // Constructors && public members
+    unsigned int defaultDepth = 10; // default search depth.
 
     ChessEngine(const std::string& path);
     ~ChessEngine() {
@@ -43,7 +43,7 @@ namespace ucichess {
 
     void obtainEvaluations();
     void getOptions();
-    std::string bestMove();
+    std::string bestMove(int);
     void isready();
 
     bool newGame();
@@ -69,4 +69,5 @@ namespace ucichess {
     FILE* fromEngine;
     FILE* toEngine;
 
-  } // namespace ucichess
+  }; // namespace ucichess
+} // namespace ucichess

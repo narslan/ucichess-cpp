@@ -13,8 +13,8 @@ namespace ucichess {
     ce.go(std::stoi(depth));
     ce.obtainEvaluations();
   };
-  void UCIBest(ChessEngine& ce, std::string param) {
-    auto v = ce.bestMove();
+  void UCIBest(ChessEngine& ce, std::string depth) {
+    auto v = ce.bestMove(std::stoi(depth));
     fmt::print("bestmove: {}\n", v);
   };
 
