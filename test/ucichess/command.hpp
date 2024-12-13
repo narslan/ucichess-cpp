@@ -8,18 +8,18 @@ namespace ucichess {
   using StrArgs = std::vector<std::string>;
   struct command {
     std::string name;
-    void (*func)(ChessEngine& ce);
+    void (*func)(ChessEngine& ce, std::string param);
   };
 
   //   bool quit_flag = false;
 
-  void UCIQuit(ChessEngine& ce);
-  void UCIGo(ChessEngine& ce);
-  void UCIIsReady(ChessEngine& ce);
-  void UCIPosition(ChessEngine& ce);
-  void UCISetOption(ChessEngine& ce);
-  void UCIInfo(ChessEngine& ce);
-  void UCIBest(ChessEngine& ce);
+  void UCIQuit(ChessEngine& ce, std::string);
+  void UCIGo(ChessEngine& ce, std::string depth);
+  void UCIIsReady(ChessEngine& ce, std::string);
+  void UCIPosition(ChessEngine& ce, std::string param);
+  void UCISetOption(ChessEngine& ce, std::string param);
+  void UCIInfo(ChessEngine& ce, std::string param);
+  void UCIBest(ChessEngine& ce, std::string param);
 
   static std::vector<command> uci_commands{
       // UCI Commands

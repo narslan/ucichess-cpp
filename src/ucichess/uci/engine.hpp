@@ -13,11 +13,15 @@ namespace ucichess {
 
   class ChessEngine {
     public:
+    // Constructors && members
+    unsigned int depth; // default search depth.
+
     ChessEngine(const std::string& path);
     ~ChessEngine() {
       quit();
     };
 
+    // wait for the child.
     p wait();
 
     //API 2:
@@ -37,7 +41,6 @@ namespace ucichess {
       send(ss.str());
     };
 
-    //void setOptions(std::map<std::string, std::string>& options);
     void obtainEvaluations();
     void getOptions();
     std::string bestMove();
@@ -65,6 +68,5 @@ namespace ucichess {
 
     FILE* fromEngine;
     FILE* toEngine;
-  };
 
-} // namespace ucichess
+  } // namespace ucichess

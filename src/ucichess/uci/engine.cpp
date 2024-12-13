@@ -1,5 +1,7 @@
 #include "engine.hpp"
 #include "../error/error.hpp"
+#include "evaluation.hpp"
+
 #include <cstring>
 #include <fcntl.h>
 
@@ -263,6 +265,7 @@ namespace ucichess {
     };
     if((info.find("multipv ") != std::string::npos) || (info.find("nodes ") != std::string::npos)) {
       if((info.find("cp ") != std::string::npos)) {
+
         int numTokens = infoTokens.size();
         int t = 1;
         while(t < numTokens && infoTokens[t] != "depth") {
@@ -270,11 +273,6 @@ namespace ucichess {
         }
         if(t < numTokens) {
           int depth = std::stoi(infoTokens[t + 1]);
-          //  if(depth == searchDepth) {
-          //fmt::print("{}\n", info);
-          //Evaluation* ev = new Evaluation(infoTokens, info);
-          //saveEvaluation(ev, info);
-          //}
         }
       }
     }
@@ -287,21 +285,12 @@ namespace ucichess {
     bool eof = false;
 
     do {
-
       reply = getResponse(eof);
-      // debug("reply: %s", reply.c_str());
-      // debug("reply size: %d", reply.size());
-      // debug("not eof? %s", !eof ? "true" : "false");
       tokens.clear();
       tokenise(reply, tokens);
       std::string tokenType = tokens[0];
-      if(!eof && reply.size() > 13) {
-        if(tokenType == "info") {
-          extractInfo(reply, tokens);
-        }
-        else if(tokenType == "bestmove") {
-          bestMoveFound = true;
-        }
+      if(!eof && tokenType == "info") {
+        extractInfo(reply, tokens);
       }
       else if(!eof && tokenType == "bestmove") {
         bestMoveFound = true;
@@ -310,7 +299,7 @@ namespace ucichess {
   }
 
   std::string ChessEngine::bestMove() {
-    go(10);
+    go(depth);
     std::string reply;
     std::string bestmove;
     std::vector<std::string> tokens;
@@ -320,9 +309,7 @@ namespace ucichess {
     do {
 
       reply = getResponse(eof);
-      // debug("reply: %s", reply.c_str());
-      // debug("reply size: %d", reply.size());
-      // debug("not eof? %s", !eof ? "true" : "false");
+
       tokens.clear();
       tokenise(reply, tokens);
       std::string tokenType = tokens[0];

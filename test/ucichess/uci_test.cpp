@@ -36,12 +36,16 @@ int main(int argc, const char** argv) {
     auto args = split_s(in, ' ');
 
     std::string command = args[0];
+    std::string pa = "";
+    if(args.size() == 3) {
+      pa = args[2];
+    }
 
     if(command == "quit") {
       std::vector<ucichess::command>::iterator it = std::find_if(
           ucichess::uci_commands.begin(), ucichess::uci_commands.end(), FindByName("quit"));
       if(it != ucichess::uci_commands.end()) {
-        it->func(c);
+        it->func(c, pa);
       }
       break;
     }
@@ -51,7 +55,7 @@ int main(int argc, const char** argv) {
       if(command == uci_command.name) {
         command_found = true;
         fmt::print("uci_command: '{}'\n", uci_command.name);
-        uci_command.func(c);
+        uci_command.func(c, pa);
         continue;
       }
     }
