@@ -26,9 +26,9 @@ class MyVisitor : public pgn::Visitor {
 
   void move(std::string_view move, std::string_view comment) {
 
-    fmt::print("move: {}\n", move);
     auto m = uci::parseSan(board, move);
     board.makeMove(m);
+
     //fmt::print("{}\n", board.inCheck());
   }
 

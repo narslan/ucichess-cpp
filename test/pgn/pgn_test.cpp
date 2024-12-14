@@ -7,7 +7,7 @@
 int main(int argc, const char** argv) {
 
   if(argc != 2) {
-    throw std::runtime_error("supply a pgn file...rrrr");
+    throw std::runtime_error("supply a pgn file.");
   }
 
   std::string file = argv[1];
