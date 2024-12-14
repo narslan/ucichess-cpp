@@ -36,7 +36,7 @@ endforeach()
 
 ## pgn tests
 
-list(APPEND TESTS_PGN pgn_test)
+list(APPEND TESTS_PGN pgn_test pgn2sqlite_test)
 
 foreach(test IN LISTS TESTS_PGN)
         add_executable(${test} "pgn/${test}.cpp" )
@@ -44,7 +44,7 @@ foreach(test IN LISTS TESTS_PGN)
                 CXX_STANDARD 23
                 CXX_STANDARD_REQUIRED ON
         )
-        target_link_libraries(${test} ${project_name})
+        target_link_libraries(${test} ${project_name} SQLiteCpp)
         add_dependencies(${test} ${project_name})
 endforeach()
 
