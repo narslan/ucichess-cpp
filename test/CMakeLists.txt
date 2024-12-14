@@ -44,7 +44,7 @@ foreach(test IN LISTS TESTS_PGN)
                 CXX_STANDARD 20
                 CXX_STANDARD_REQUIRED ON
         )
-        target_link_libraries(${test} ${project_name}-pgn2sqlite )
+        target_link_libraries(${test} ${project_name}-pgn2sqlite fmt::fmt)
         add_dependencies(${test} ${project_name}-pgn2sqlite)
 endforeach()
 

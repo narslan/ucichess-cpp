@@ -1,4 +1,4 @@
-#include "../../src/ucichess/pgnread/pgnparse.hpp"
+#include "../../src/ucichess/pgn/parse.hpp"
 #include <filesystem>
 #include <fmt/core.h>
 #include <fstream>
@@ -14,7 +14,7 @@ int main(int argc, const char** argv) {
 
   auto file_stream = std::ifstream(file);
 
-  auto vis = std::make_unique<MyVisitor>();
+  auto vis = std::make_unique<pgn2sqlite::Parser>();
 
   const auto t0 = std::chrono::high_resolution_clock::now();
 

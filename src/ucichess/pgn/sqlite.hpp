@@ -8,8 +8,12 @@ namespace pgn2sqlite {
 
     public:
     pgndb();
+    ~pgndb() {
+      remove(dbpath);
+    };
+    void migrate();
 
-    SQLiteCpp::Database mDb;
+    SQLite::Database db;
   };
 
 } // namespace pgn2sqlite
