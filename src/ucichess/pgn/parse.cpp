@@ -4,6 +4,7 @@ namespace pgn2sqlite {
 
   void Parser::startPgn() {
     board.setFen(constants::STARTPOS);
+    db->migrate();
   }
 
   void Parser::header(std::string_view key, std::string_view value) {

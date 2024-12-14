@@ -1,9 +1,11 @@
 #pragma once
 
 #include <fmt/core.h>
+#include <memory>
 #include <string_view>
 
 #include "../chess/chess.hpp"
+#include "ucichess/pgn/sqlite.hpp"
 
 using namespace chess;
 namespace pgn2sqlite {
@@ -22,5 +24,6 @@ namespace pgn2sqlite {
 
     private:
     Board board;
+    std::unique_ptr<pgndb> db;
   };
 } // namespace pgn2sqlite
