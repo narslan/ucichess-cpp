@@ -4,13 +4,10 @@
 namespace pgn2sqlite {
 
   class pgndb {
-    const char* dbpath = "example.db3";
 
     public:
-    pgndb();
-    ~pgndb() {
-      remove(dbpath);
-    };
+    pgndb(std::string dbpath);
+    ~pgndb() = default;
     void migrate();
 
     SQLite::Database db;
