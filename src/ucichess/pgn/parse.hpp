@@ -9,7 +9,6 @@
 
 #include "ucichess/pgn/sqlite.hpp"
 
-#include "async_simple/coro/Generator.h"
 using namespace chess;
 namespace pgn2sqlite {
 
@@ -17,11 +16,6 @@ namespace pgn2sqlite {
 
   class Parser : public pgn::Visitor {
 
-    async_simple::coro::Generator<int> iota(int start = 0) {
-      while(true) {
-        co_yield start++;
-      }
-    }
     struct Counter {
       bool increment_if_not_zero() {
         if(counter > 0) {
