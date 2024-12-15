@@ -15,9 +15,9 @@ namespace pgn2sqlite {
         event text,
         site text,
         date text,
-        round text,
-        white text,
-        black text,
+        eco text,
+        player1 text,
+        player2 text,
         result text,
         moves text);
         )");
