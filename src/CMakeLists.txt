@@ -33,7 +33,6 @@ find_package(Threads REQUIRED)
 
 add_library(${project_name}-pgn2sqlite
             SHARED
-           
             ucichess/pgn/coroutine.cpp
             ucichess/pgn/coroutine.hpp
             ucichess/pgn/parse.cpp

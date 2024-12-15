@@ -1,6 +1,7 @@
 #pragma once
 
 #include <fmt/core.h>
+
 #include <memory>
 
 #include <string_view>
@@ -33,11 +34,6 @@ namespace pgn2sqlite {
       };
       uint64_t counter{1};
     };
-
-    // struct PGNRow {
-    //   std::vector<std::pair<std::string_view, std::string_view>> m_headers;
-    //   std::vector<std::string_view> m_moves;
-    // };
 
     public:
     virtual ~Parser() { }

@@ -1,28 +1,14 @@
 #include "parse.hpp"
-#include <algorithm>
 #include <fmt/format.h>
+#include <future>
 #include <memory>
 #include <string>
 #include <string_view>
+
 namespace pgn2sqlite {
 
   /*! note: delimiter cannot contain NUL characters
  */
-  template <typename Range, typename Value = typename Range::value_type>
-  std::string Join(Range const& elements, const char* const delimiter) {
-    std::ostringstream os;
-    auto b = begin(elements), e = end(elements);
-
-    if(b != e) {
-      std::copy(b, prev(e), std::ostream_iterator<Value>(os, delimiter));
-      b = prev(e);
-    }
-    if(b != e) {
-      os << *b;
-    }
-
-    return os.str();
-  }
 
   Parser::Parser()
       : db{std::make_unique<pgn2sqlite::pgndb>("abdo.db")} {
@@ -31,17 +17,22 @@ namespace pgn2sqlite {
 
   void Parser::startPgn() {
     board.setFen(constants::STARTPOS);
+    //fmt::print("Start pgn: counter {}\n", m_counter.read());
+  }
 
-    fmt::print("Start pgn: counter {}\n", m_counter.read());
+  std::string returnTwo() {
+    return "hello";
   }
 
   void Parser::header(std::string_view key, std::string_view value) {
-    fmt::print("header: counter {}\n", m_counter.read());
-    fmt::print("{} {}\n", key, value);
+    //fmt::print("header: counter {}\n", m_counter.read());
+    //fmt::print("{} {}\n", key, value);
+
+    std::future<std::string> f = std::async(std::launch::async, returnTwo);
   }
 
   void Parser::startMoves() {
-    fmt::print("start moves: counter {}\n", m_counter.read());
+    //fmt::print("start moves: counter {}\n", m_counter.read());
     //
   }
 
@@ -59,7 +50,7 @@ namespace pgn2sqlite {
 
     std::string event, site, date, eco, player1, player2, result, moves_string;
     //std::string moves_string = Join(moves, " ");
-    fmt::print("-------------End pgn:\n");
+    fmt::print("-------------\nEnd pgn:\n");
 
     // for(auto el : headers) {
     //   fmt::print("'{}':'{}'\n", el.first, el.second);

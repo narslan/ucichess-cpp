@@ -1,7 +1,8 @@
 #include "coroutine.hpp"
 #include <fstream>
+#include <stdexcept>
 
-const std::string random_hex_id() {
+const unsigned long long int random_id() {
 
   unsigned long long int random_value = 0; //Declare value to store data into
   size_t size = sizeof(random_value); //Declare size of data
@@ -11,19 +12,18 @@ const std::string random_hex_id() {
     urandom.read(reinterpret_cast<char*>(&random_value), size); //Read from urandom
     if(urandom) //Check if stream is ok, read succeeded
     {
-      return fmt::format("{:x}\n", random_value);
+      return random_value;
     }
     else //Read failed
     {
-      return fmt::format("err: failed to read from /dev/urandom\n");
+      return 0;
     }
     urandom.close(); //close stream
   }
   else //Open failed
   {
-    return fmt::format("err: failed to open /dev/urandom\n");
+    throw std::runtime_error("err: failed to open /dev/urandom\n");
   }
-  return 0;
 }
 
 namespace pgn2sqlite {
@@ -32,7 +32,7 @@ namespace pgn2sqlite {
     Awaiter a{continuation_out};
     for(unsigned i = 0;; ++i) {
       co_await a;
-      fmt::print("{} {}\n", i, random_hex_id());
+      fmt::print("{0} {1} {1:x}\n", i, random_id());
     }
   }
 
