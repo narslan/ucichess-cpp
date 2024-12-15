@@ -32,6 +32,10 @@ target_include_directories(${project_name}-engine
 
 add_library(${project_name}-pgn2sqlite
             SHARED
+            ucichess/pgn/async_simple.cpp
+            ucichess/pgn/async_simple.hpp
+            ucichess/pgn/coroutine.cpp
+            ucichess/pgn/coroutine.hpp
             ucichess/pgn/parse.cpp
             ucichess/pgn/parse.hpp
             ucichess/pgn/sqlite.cpp
@@ -42,7 +46,7 @@ set_target_properties(${project_name}-pgn2sqlite PROPERTIES
             CXX_EXTENSIONS OFF
             CXX_STANDARD_REQUIRED ON
 )
-target_link_libraries(${project_name}-pgn2sqlite fmt::fmt SQLiteCpp)
+target_link_libraries(${project_name}-pgn2sqlite fmt::fmt SQLiteCpp async_simple)
 
  target_include_directories(${project_name}-pgn2sqlite
          PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>

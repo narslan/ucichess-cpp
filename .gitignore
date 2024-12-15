@@ -3,3 +3,4 @@ build/
 compile_commands.json
 *.zip
 third_party
+external/async_simple

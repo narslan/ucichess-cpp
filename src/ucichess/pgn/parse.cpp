@@ -1,9 +1,9 @@
 #include "parse.hpp"
 #include <algorithm>
 #include <fmt/format.h>
+#include <memory>
+#include <string>
 #include <string_view>
-#include <utility>
-
 namespace pgn2sqlite {
 
   /*! note: delimiter cannot contain NUL characters
@@ -40,7 +40,6 @@ namespace pgn2sqlite {
   }
 
   void Parser::startMoves() {
-
     fmt::print("Start Moves:\n");
     //
   }

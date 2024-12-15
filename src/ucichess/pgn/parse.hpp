@@ -2,13 +2,15 @@
 
 #include <fmt/core.h>
 #include <memory>
-#include <string>
+
 #include <string_view>
-#include <vector>
 
 #include "../chess/chess.hpp"
-#include "ucichess/pgn/sqlite.hpp"
 
+#include "async_simple/coro/Lazy.h"
+#include "async_simple/coro/SyncAwait.h"
+
+#include "ucichess/pgn/sqlite.hpp"
 using namespace chess;
 namespace pgn2sqlite {
 
@@ -32,10 +34,10 @@ namespace pgn2sqlite {
       uint64_t counter{1};
     };
 
-    struct PGNRow {
-      std::vector<std::pair<std::string_view, std::string_view>> m_headers;
-      std::vector<std::string_view> m_moves;
-    };
+    // struct PGNRow {
+    //   std::vector<std::pair<std::string_view, std::string_view>> m_headers;
+    //   std::vector<std::string_view> m_moves;
+    // };
 
     public:
     virtual ~Parser() { }
@@ -52,7 +54,6 @@ namespace pgn2sqlite {
     private:
     Board board;
     std::unique_ptr<pgn2sqlite::pgndb> db;
-    std::vector<PGNRow> pgn_rows;
     Counter m_counter;
   };
 } // namespace pgn2sqlite
