@@ -1,6 +1,6 @@
 #include "parse.hpp"
+#include <algorithm>
 #include <fmt/format.h>
-#include <numeric>
 #include <string_view>
 #include <utility>
 
@@ -53,15 +53,13 @@ namespace pgn2sqlite {
 
   void Parser::header(std::string_view key, std::string_view value) {
 
-    fmt::print("{}: {}\n", key, value);
-    headers.emplace_back(std::make_pair(key, value));
+    headers.push_back(std::make_pair(key, value));
   }
 
   void Parser::startMoves() {
 
     fmt::print("Start Moves:\n");
-    headers.clear();
-    moves.clear();
+    //
   }
 
   void Parser::move(std::string_view move, std::string_view comment) {
@@ -69,8 +67,6 @@ namespace pgn2sqlite {
     auto m = uci::parseSan(board, move);
     board.makeMove(m);
     moves.push_back(move);
-
-    fmt::print(" {} ", move);
   }
 
   void Parser::endPgn() {
@@ -79,32 +75,50 @@ namespace pgn2sqlite {
 
     std::string event, site, date, eco, player1, player2, result;
     std::string moves_string = Join(moves, " ");
+    fmt::print("End pgn start\n");
 
     for(auto el : headers) {
-      if(el.first == "Event") {
-        event = el.second;
-      }
-      if(el.first == "Site") {
-        site = el.second;
-      }
-      if(el.first == "Date") {
-        date = el.second;
-      }
-      if(el.first == "Eco") {
-        eco = el.second;
-      }
-      if(el.first == "White") {
-        player1 = el.second;
-      }
-      if(el.first == "Black") {
-        player2 = el.second;
-      }
-      if(el.first == "Result") {
-        player2 = el.second;
-      }
+      fmt::print("+++++'{}' '{}'\n", el.first, el.second);
     }
+    auto it = std::find_if(
+        headers.begin(), headers.end(), [&](std::pair<std::string_view, std::string_view> p) {
+          return p.first == "Event";
+        });
+    event = it->second;
 
-    auto query = fmt::format("insert into pgn values (NULL, {},{},{},{},{},{},{},{} ) ",
+    auto it2 = std::find_if(
+        headers.begin(), headers.end(), [&](std::pair<std::string_view, std::string_view> p) {
+          return p.first == "Site";
+        });
+    site = it2->second;
+
+    auto it3 = std::find_if(
+        headers.begin(), headers.end(), [&](std::pair<std::string_view, std::string_view> p) {
+          return p.first == "Date";
+        });
+    date = it3->second;
+    auto it4 = std::find_if(
+        headers.begin(), headers.end(), [&](std::pair<std::string_view, std::string_view> p) {
+          return p.first == "Eco";
+        });
+    eco = it4->second;
+    auto it5 = std::find_if(
+        headers.begin(), headers.end(), [&](std::pair<std::string_view, std::string_view> p) {
+          return p.first == "White";
+        });
+    player1 = it5->second;
+    auto it6 = std::find_if(
+        headers.begin(), headers.end(), [&](std::pair<std::string_view, std::string_view> p) {
+          return p.first == "Black";
+        });
+    player2 = it6->second;
+    auto it7 = std::find_if(
+        headers.begin(), headers.end(), [&](std::pair<std::string_view, std::string_view> p) {
+          return p.first == "Result";
+        });
+    result = it7->second;
+
+    auto query = fmt::format("insert into pgn values (NULL, {}, {}, {}, {}, {}, {}, {}, {} ) ",
                              event,
                              site,
                              date,
@@ -113,12 +127,20 @@ namespace pgn2sqlite {
                              player2,
                              result,
                              moves_string);
-    db->db.exec(query);
+    fmt::print("{}\n", query);
+    try {
+      db->db.exec(query);
 
-    SQLite::Statement query2(db->db, "SELECT * FROM pgn");
+      SQLite::Statement query2(db->db, "SELECT * FROM pgn");
 
-    while(query2.executeStep()) {
-      fmt::print("{} {} \n", query2.getColumn(1).getInt(), query2.getColumn(2).getInt());
+      while(query2.executeStep()) {
+        fmt::print("{} {} \n", query2.getColumn(1).getInt(), query2.getColumn(2).getInt());
+      }
+      headers.clear();
+      moves.clear();
+    }
+    catch(const std::exception& e) {
+      fmt::print("SQLite Error {}\n", e.what());
     }
 
     fmt::print("number of pgn  files: {} \n", m_counter.read() - 1);
