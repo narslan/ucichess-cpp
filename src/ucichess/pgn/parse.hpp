@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <string_view>
+#include <vector>
 
 #include "../chess/chess.hpp"
 #include "ucichess/pgn/sqlite.hpp"
@@ -31,6 +32,11 @@ namespace pgn2sqlite {
       uint64_t counter{1};
     };
 
+    struct PGNRow {
+      std::vector<std::pair<std::string_view, std::string_view>> m_headers;
+      std::vector<std::string_view> m_moves;
+    };
+
     public:
     virtual ~Parser() { }
     Parser();
@@ -46,8 +52,7 @@ namespace pgn2sqlite {
     private:
     Board board;
     std::unique_ptr<pgn2sqlite::pgndb> db;
-    std::vector<std::pair<std::string_view, std::string_view>> headers;
-    std::vector<std::string_view> moves;
+    std::vector<PGNRow> pgn_rows;
     Counter m_counter;
   };
 } // namespace pgn2sqlite
