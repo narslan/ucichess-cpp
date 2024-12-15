@@ -4,6 +4,6 @@
 
 int main(int argc, const char** argv) {
 
-  pgn2sqlite::pgndb p;
+  pgn2sqlite::pgndb p{"hello.db"};
   p.migrate();
 }

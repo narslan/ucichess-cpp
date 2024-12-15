@@ -10,8 +10,9 @@ namespace pgn2sqlite {
     // Create a new table with an explicit "id" column aliasing the underlying rowid
     db.exec("DROP TABLE IF EXISTS pgn");
     db.exec(R"(
-        create table pgn ( pgn_id integer primary key,
-               event text,
+        create table pgn ( 
+        pgn_id integer primary key,
+        event text,
         site text,
         date text,
         round text,
@@ -23,3 +24,5 @@ namespace pgn2sqlite {
   };
 
 } // namespace pgn2sqlite
+
+// std::make_unique<pgn2sqlite::pgndb>("abdo.db");

@@ -2,6 +2,7 @@
 
 #include <fmt/core.h>
 #include <memory>
+#include <string>
 #include <string_view>
 
 #include "../chess/chess.hpp"
@@ -12,7 +13,7 @@ namespace pgn2sqlite {
   class Parser : public pgn::Visitor {
     public:
     virtual ~Parser() { }
-
+    Parser();
     void startPgn();
 
     void header(std::string_view key, std::string_view value);
@@ -24,6 +25,8 @@ namespace pgn2sqlite {
 
     private:
     Board board;
-    std::unique_ptr<pgndb> db;
+    std::unique_ptr<pgn2sqlite::pgndb> db;
+    std::vector<std::pair<std::string_view, std::string_view>> headers;
+    std::vector<std::string_view> moves;
   };
 } // namespace pgn2sqlite
