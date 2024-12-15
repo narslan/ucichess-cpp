@@ -13,3 +13,5 @@ There are some part from following works. They have public licenses.
    [UCI Analayzer](https://www.cs.kent.ac.uk/people/staff/djb/uci-analyser/)
    I want to change code there. It is to c-ish.
 2. [C++ Wrapper for Standard UNIX Functions](https://www.mrochkind.com/aup/ex/group__Ux.html) I add some routines from this wrapper to the project. It is not too essential to keep.
+
+export ASAN_OPTIONS=verify_asan_link_order=0

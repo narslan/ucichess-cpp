@@ -7,15 +7,21 @@
 
 #include "../chess/chess.hpp"
 
-#include "async_simple/coro/Lazy.h"
-#include "async_simple/coro/SyncAwait.h"
-
 #include "ucichess/pgn/sqlite.hpp"
+
+#include "async_simple/coro/Generator.h"
 using namespace chess;
 namespace pgn2sqlite {
 
+  using Texts = std::vector<std::string>;
+
   class Parser : public pgn::Visitor {
 
+    async_simple::coro::Generator<int> iota(int start = 0) {
+      while(true) {
+        co_yield start++;
+      }
+    }
     struct Counter {
       bool increment_if_not_zero() {
         if(counter > 0) {

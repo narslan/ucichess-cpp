@@ -44,6 +44,8 @@ foreach(test IN LISTS TESTS_PGN)
                 CXX_STANDARD 20
                 CXX_STANDARD_REQUIRED ON
         )
+        SET( CMAKE_CXX_FLAGS "-Ofast -DNDEBUG -std=c++20 -march=native -fpic -ftree-vectorize") 
+
         target_link_libraries(${test} ${project_name}-pgn2sqlite fmt::fmt)
         add_dependencies(${test} ${project_name}-pgn2sqlite)
 endforeach()

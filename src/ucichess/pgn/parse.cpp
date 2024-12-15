@@ -32,19 +32,21 @@ namespace pgn2sqlite {
   void Parser::startPgn() {
     board.setFen(constants::STARTPOS);
 
-    fmt::print("Start pgn:\n");
+    fmt::print("Start pgn: counter {}\n", m_counter.read());
   }
 
   void Parser::header(std::string_view key, std::string_view value) {
+    fmt::print("header: counter {}\n", m_counter.read());
     fmt::print("{} {}\n", key, value);
   }
 
   void Parser::startMoves() {
-    fmt::print("Start Moves:\n");
+    fmt::print("start moves: counter {}\n", m_counter.read());
     //
   }
 
   void Parser::move(std::string_view move, std::string_view comment) {
+    fmt::print("move counter {}\n", m_counter.read());
 
     auto m = uci::parseSan(board, move);
     // fmt::print("{}\n", move m_moves.push_back(move);
@@ -111,7 +113,7 @@ namespace pgn2sqlite {
                              result,
                              moves_string);
     fmt::print("{}\n", query);
-    fmt::print("number of pgn  files: {} \n", m_counter.read() - 1);
+    fmt::print("last: {}\n", m_counter.read());
     // headers.clear();
     // moves.clear();
 

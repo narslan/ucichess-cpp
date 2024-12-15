@@ -1,5 +1,7 @@
 #include "async_simple.hpp"
 
+#include <fstream>
+
 using namespace async_simple::coro;
 namespace pgn2sqlite {
   using Texts = std::vector<std::string>;

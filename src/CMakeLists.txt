@@ -29,6 +29,7 @@ target_include_directories(${project_name}-engine
 
 # pgn2sqlite library
 
+find_package(Threads REQUIRED)
 
 add_library(${project_name}-pgn2sqlite
             SHARED
@@ -46,7 +47,7 @@ set_target_properties(${project_name}-pgn2sqlite PROPERTIES
             CXX_EXTENSIONS OFF
             CXX_STANDARD_REQUIRED ON
 )
-target_link_libraries(${project_name}-pgn2sqlite fmt::fmt SQLiteCpp async_simple)
+target_link_libraries(${project_name}-pgn2sqlite fmt::fmt SQLiteCpp async_simple Threads::Threads)
 
  target_include_directories(${project_name}-pgn2sqlite
          PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
