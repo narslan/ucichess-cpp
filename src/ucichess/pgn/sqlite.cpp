@@ -4,7 +4,7 @@ namespace pgn2sqlite {
 
   pgndb::pgndb(std::string path)
       : db{SQLite::Database(path, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE)} {
-    fmt::print("{} opened successfully", db.getFilename());
+    fmt::print("{} opened successfully\n", db.getFilename());
   };
   void pgndb::migrate() {
     // Create a new table with an explicit "id" column aliasing the underlying rowid

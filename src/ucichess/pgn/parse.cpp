@@ -1,9 +1,10 @@
 #include "parse.hpp"
+#include <cstdint>
 #include <fmt/format.h>
-#include <future>
 #include <memory>
 #include <string>
 #include <string_view>
+#include <utility>
 
 namespace pgn2sqlite {
 
@@ -18,122 +19,136 @@ namespace pgn2sqlite {
   void Parser::startPgn() {
     board.setFen(constants::STARTPOS);
     moves_.clear();
-    comments_.clear();
-    count_ = 0;
-    game_count_++;
-    //fmt::print("Start pgn: counter {}\n", m_counter.read());
-  }
+    headers_.clear();
 
-  std::string returnTwo() {
-    return "hello";
+    game_count_.increment_if_not_zero();
+    fmt::print("Start pgn: counter {}\n", game_count_.read());
   }
 
   void Parser::header(std::string_view key, std::string_view value) {
-    //fmt::print("header: counter {}\n", m_counter.read());
-    //fmt::print("{} {}\n", key, value);
 
-    std::future<std::string> f = std::async(std::launch::async, returnTwo);
+    headers_.push_back(std::make_pair(std::string(key), std::string(value)));
+
+    if(key == "Result" && value == "*") {
+      this->skipPgn(true);
+    }
   }
 
-  void Parser::startMoves() {
-    move_start_count_++;
-    assert(end_count_ == game_count_ - 1);
-  }
+  void Parser::startMoves() { }
 
   void Parser::move(std::string_view move, std::string_view comment) {
-    fmt::print("move counter {}\n", m_counter.read());
 
-    count_++;
-
-    if(comment.size() > 0) {
-      comments_.push_back(std::string(comment));
-    }
+    uint64_t c = game_count_.read();
 
     moves_.push_back(std::string(move));
 
     auto m = uci::parseSan(board, move);
-    // fmt::print("{}\n", move m_moves.push_back(move);
+
     board.makeMove(m);
   }
 
+  bool IsEvent(std::pair<std::string, std::string> i) {
+    return i.first == "Event";
+  };
+
+  bool IsSite(std::pair<std::string, std::string> i) {
+    return i.first == "Site";
+  };
+
+  bool IsDate(std::pair<std::string, std::string> i) {
+    return i.first == "Date";
+  };
+
+  bool IsEco(std::pair<std::string, std::string> i) {
+    return i.first == "ECO";
+  };
+
+  bool IsWhite(std::pair<std::string, std::string> i) {
+    return i.first == "White";
+  };
+
+  bool IsBlack(std::pair<std::string, std::string> i) {
+    return i.first == "Black";
+  };
+
+  bool IsResult(std::pair<std::string, std::string> i) {
+    return i.first == "Result";
+  };
   void Parser::endPgn() {
-    //std::string b = board.getFen();
-    m_counter.increment_if_not_zero();
 
-    std::string event, site, date, eco, player1, player2, result, moves_string;
-    //std::string moves_string = Join(moves, " ");
-    fmt::print("-------------\nEnd pgn:\n");
-
-    // for(auto el : headers) {
-    //   fmt::print("'{}':'{}'\n", el.first, el.second);
+    // for(auto el : moves_) {
+    //   fmt::print("{} {}\n", el.first, el.second);
+    // }
+    // fmt::print("----------\n");
+    // for(auto el : headers_) {
+    //   fmt::print("{} {}\n", el.first, el.second);
     // }
 
-    // auto it = std::find_if(
-    //     headers.begin(), headers.end(), [&](std::pair<std::string_view, std::string_view> p) {
-    //       return p.first == "Event";
-    //     });
-    // event = it->second;
+    std::string mvs;
+    for(auto el : moves_) {
+      mvs = mvs + " " + el;
+      // fmt::print("{} {}\n", el.first, el.second);
+    }
 
-    // auto it2 = std::find_if(
-    //     headers.begin(), headers.end(), [&](std::pair<std::string_view, std::string_view> p) {
-    //       return p.first == "Site";
-    //     });
-    // site = it2->second;
+    //std::string b = board.getFen();
 
-    // auto it3 = std::find_if(
-    //     headers.begin(), headers.end(), [&](std::pair<std::string_view, std::string_view> p) {
-    //       return p.first == "Date";
-    //     });
-    // date = it3->second;
-    // auto it4 = std::find_if(
-    //     headers.begin(), headers.end(), [&](std::pair<std::string_view, std::string_view> p) {
-    //       return p.first == "Eco";
-    //     });
-    // eco = it4->second;
-    // auto it5 = std::find_if(
-    //     headers.begin(), headers.end(), [&](std::pair<std::string_view, std::string_view> p) {
-    //       return p.first == "White";
-    //     });
-    // player1 = it5->second;
-    // auto it6 = std::find_if(
-    //     headers.begin(), headers.end(), [&](std::pair<std::string_view, std::string_view> p) {
-    //       return p.first == "Black";
-    //     });
-    // player2 = it6->second;
-    // auto it7 = std::find_if(
-    //     headers.begin(), headers.end(), [&](std::pair<std::string_view, std::string_view> p) {
-    //       return p.first == "Result";
-    //     });
-    // result = it7->second;
+    std::string event, site, date, eco, player1, player2, result;
 
-    auto query = fmt::format("insert into pgn values (NULL, {}, {}, {}, {}, {}, {}, {}, {} ) ",
-                             event,
-                             site,
-                             date,
-                             eco,
-                             player1,
-                             player2,
-                             result,
-                             moves_string);
-    fmt::print("{}\n", query);
-    fmt::print("last: {}\n", m_counter.read());
+    auto it = std::find_if(headers_.begin(), headers_.end(), IsEvent);
+    event = it->second;
+
+    it = std::find_if(headers_.begin(), headers_.end(), IsSite);
+    site = it->second;
+
+    it = std::find_if(headers_.begin(), headers_.end(), IsDate);
+    date = it->second;
+
+    it = std::find_if(headers_.begin(), headers_.end(), IsEco);
+    eco = it->second;
+
+    it = std::find_if(headers_.begin(), headers_.end(), IsWhite);
+    player1 = it->second;
+
+    it = std::find_if(headers_.begin(), headers_.end(), IsBlack);
+    player2 = it->second;
+
+    it = std::find_if(headers_.begin(), headers_.end(), IsResult);
+    result = it->second;
+
+    // fmt::print("-------------\nEnd pgn:\n");
+
+    //    fmt::print("{}\n", query);
+    // fmt::print("last: {}\n", m_counter.read());
     // headers.clear();
     // moves.clear();
 
-    // try {
-    //   db->db.exec(query);
+    try {
+      // Begin transaction
+      SQLite::Transaction transaction(db->db);
+      SQLite::Statement query{db->db, "insert into pgn values (NULL,?,?,?,?,?,?,?,?)"};
 
-    //   SQLite::Statement query2(db->db, "SELECT * FROM pgn");
+      query.bind(1, event);
+      query.bind(2, site);
+      query.bind(3, date);
+      query.bind(4, eco);
+      query.bind(5, player1);
+      query.bind(6, player2);
+      query.bind(7, result);
+      query.bind(8, mvs);
+      query.exec();
+      transaction.commit();
 
-    //   while(query2.executeStep()) {
-    //     fmt::print("{} {} \n", query2.getColumn(1).getInt(), query2.getColumn(2).getText());
-    //   }
-    //   headers.clear();
-    //   moves.clear();
-    // }
-    // catch(const std::exception& e) {
-    //   fmt::print("SQLite Error {}\n", e.what());
-    // }
+      SQLite::Statement query2(db->db, "SELECT * FROM pgn");
+
+      while(query2.executeStep()) {
+        fmt::print("{} {} \n", query2.getColumn(1).getInt(), query2.getColumn(2).getText());
+      }
+      // headers.clear();
+      // moves.clear();
+    }
+    catch(const std::exception& e) {
+      fmt::print("SQLite Error {}\n", e.what());
+    }
   }
 
 } // namespace pgn2sqlite

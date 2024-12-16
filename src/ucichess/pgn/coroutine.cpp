@@ -24,6 +24,7 @@ const unsigned long long int random_id() {
   {
     throw std::runtime_error("err: failed to open /dev/urandom\n");
   }
+  return 0;
 }
 
 namespace pgn2sqlite {
