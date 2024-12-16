@@ -56,7 +56,7 @@ namespace pgn2sqlite {
   };
 
   bool IsDate(std::pair<std::string, std::string> i) {
-    return i.first == "Date";
+    return (i.first == "Date" || i.first == "UTCDate");
   };
 
   bool IsEco(std::pair<std::string, std::string> i) {
@@ -76,18 +76,9 @@ namespace pgn2sqlite {
   };
   void Parser::endPgn() {
 
-    // for(auto el : moves_) {
-    //   fmt::print("{} {}\n", el.first, el.second);
-    // }
-    // fmt::print("----------\n");
-    // for(auto el : headers_) {
-    //   fmt::print("{} {}\n", el.first, el.second);
-    // }
-
     std::string mvs;
     for(auto el : moves_) {
       mvs = mvs + " " + el;
-      // fmt::print("{} {}\n", el.first, el.second);
     }
 
     //std::string b = board.getFen();
@@ -115,13 +106,6 @@ namespace pgn2sqlite {
     it = std::find_if(headers_.begin(), headers_.end(), IsResult);
     result = it->second;
 
-    // fmt::print("-------------\nEnd pgn:\n");
-
-    //    fmt::print("{}\n", query);
-    // fmt::print("last: {}\n", m_counter.read());
-    // headers.clear();
-    // moves.clear();
-
     try {
       // Begin transaction
       SQLite::Transaction transaction(db->db);
@@ -138,11 +122,11 @@ namespace pgn2sqlite {
       query.exec();
       transaction.commit();
 
-      SQLite::Statement query2(db->db, "SELECT * FROM pgn");
+      // SQLite::Statement query2(db->db, "SELECT * FROM pgn");
 
-      while(query2.executeStep()) {
-        fmt::print("{} {} \n", query2.getColumn(1).getInt(), query2.getColumn(2).getText());
-      }
+      // while(query2.executeStep()) {
+      //   fmt::print("{} {} \n", query2.getColumn(1).getInt(), query2.getColumn(2).getText());
+      // }
       // headers.clear();
       // moves.clear();
     }
