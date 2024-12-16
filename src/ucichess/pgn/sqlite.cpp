@@ -1,4 +1,4 @@
-#include "ucichess/pgn/sqlite.hpp"
+#include "sqlite.hpp"
 #include <fmt/core.h>
 namespace pgn2sqlite {
 
