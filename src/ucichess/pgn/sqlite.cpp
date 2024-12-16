@@ -1,4 +1,5 @@
 #include "sqlite.hpp"
+#include "SQLiteCpp/Database.h"
 #include <fmt/core.h>
 namespace pgn2sqlite {
 

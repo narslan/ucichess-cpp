@@ -13,4 +13,12 @@ namespace pgn2sqlite {
     SQLite::Database db;
   };
 
+  class pgndb_ro {
+
+    public:
+    pgndb_ro(std::string dbpath);
+    ~pgndb_ro() = default;
+
+    SQLite::Database db;
+  };
 } // namespace pgn2sqlite
