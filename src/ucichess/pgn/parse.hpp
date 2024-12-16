@@ -17,6 +17,8 @@ namespace pgn2sqlite {
 
   class Parser : public pgn::Visitor {
 
+    // Taken from: https://www.youtube.com/watch?v=kPh8pod0-gk&ab_channel=CppCon .
+    // Introduction to Wait-free Algorithms in C++ Programming - Daniel Anderson
     struct Counter {
       bool increment_if_not_zero() {
         if(counter > 0) {
@@ -36,8 +38,9 @@ namespace pgn2sqlite {
     };
 
     public:
+    // constructor && destructor.
     virtual ~Parser() { }
-    Parser();
+    Parser(std::string);
     void startPgn();
 
     void header(std::string_view key, std::string_view value);
@@ -59,7 +62,7 @@ namespace pgn2sqlite {
     }
 
     private:
-    Board board;
+    // members.
     std::unique_ptr<pgn2sqlite::pgndb> db;
 
     std::vector<std::string> moves_;

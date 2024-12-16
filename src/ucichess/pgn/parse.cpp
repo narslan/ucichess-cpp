@@ -1,5 +1,4 @@
 #include "parse.hpp"
-#include <cstdint>
 #include <fmt/format.h>
 #include <memory>
 #include <string>
@@ -11,13 +10,13 @@ namespace pgn2sqlite {
   /*! note: delimiter cannot contain NUL characters
  */
 
-  Parser::Parser()
-      : db{std::make_unique<pgn2sqlite::pgndb>("abdo.db")} {
+  Parser::Parser(std::string dbpath)
+      : db{std::make_unique<pgn2sqlite::pgndb>(dbpath + ".db")} {
     db->migrate();
   };
 
   void Parser::startPgn() {
-    board.setFen(constants::STARTPOS);
+    //board.setFen(constants::STARTPOS);
     moves_.clear();
     headers_.clear();
 
@@ -38,13 +37,7 @@ namespace pgn2sqlite {
 
   void Parser::move(std::string_view move, std::string_view comment) {
 
-    uint64_t c = game_count_.read();
-
     moves_.push_back(std::string(move));
-
-    auto m = uci::parseSan(board, move);
-
-    board.makeMove(m);
   }
 
   bool IsEvent(std::pair<std::string, std::string> i) {
@@ -121,14 +114,6 @@ namespace pgn2sqlite {
       query.bind(8, mvs);
       query.exec();
       transaction.commit();
-
-      // SQLite::Statement query2(db->db, "SELECT * FROM pgn");
-
-      // while(query2.executeStep()) {
-      //   fmt::print("{} {} \n", query2.getColumn(1).getInt(), query2.getColumn(2).getText());
-      // }
-      // headers.clear();
-      // moves.clear();
     }
     catch(const std::exception& e) {
       fmt::print("SQLite Error {}\n", e.what());

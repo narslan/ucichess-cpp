@@ -6,6 +6,7 @@ namespace pgn2sqlite {
       : db{SQLite::Database(path, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE)} {
     fmt::print("{} opened successfully\n", db.getFilename());
   };
+
   void pgndb::migrate() {
     // Create a new table with an explicit "id" column aliasing the underlying rowid
     db.exec("DROP TABLE IF EXISTS pgn");
