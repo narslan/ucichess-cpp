@@ -17,6 +17,10 @@ namespace pgn2sqlite {
 
   void Parser::startPgn() {
     board.setFen(constants::STARTPOS);
+    moves_.clear();
+    comments_.clear();
+    count_ = 0;
+    game_count_++;
     //fmt::print("Start pgn: counter {}\n", m_counter.read());
   }
 
@@ -32,12 +36,20 @@ namespace pgn2sqlite {
   }
 
   void Parser::startMoves() {
-    //fmt::print("start moves: counter {}\n", m_counter.read());
-    //
+    move_start_count_++;
+    assert(end_count_ == game_count_ - 1);
   }
 
   void Parser::move(std::string_view move, std::string_view comment) {
     fmt::print("move counter {}\n", m_counter.read());
+
+    count_++;
+
+    if(comment.size() > 0) {
+      comments_.push_back(std::string(comment));
+    }
+
+    moves_.push_back(std::string(move));
 
     auto m = uci::parseSan(board, move);
     // fmt::print("{}\n", move m_moves.push_back(move);

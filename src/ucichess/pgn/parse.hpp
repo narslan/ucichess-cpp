@@ -47,9 +47,40 @@ namespace pgn2sqlite {
 
     void endPgn();
 
+    int count() const {
+      return count_;
+    }
+    int gameCount() const {
+      return game_count_;
+    }
+    int endCount() const {
+      return end_count_;
+    }
+    int moveStartCount() const {
+      return move_start_count_;
+    }
+    const auto& comments() const {
+      return comments_;
+    }
+    const auto& moves() const {
+      return moves_;
+    }
+    const auto& headers() const {
+      return headers_;
+    }
+
     private:
     Board board;
     std::unique_ptr<pgn2sqlite::pgndb> db;
     Counter m_counter;
+
+    std::vector<std::string> comments_;
+    std::vector<std::string> moves_;
+    std::vector<std::string> headers_;
+
+    int end_count_ = 0;
+    int game_count_ = 0;
+    int count_ = 0;
+    int move_start_count_ = 0;
   };
 } // namespace pgn2sqlite

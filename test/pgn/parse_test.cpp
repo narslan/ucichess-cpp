@@ -17,4 +17,8 @@ int main(int argc, const char** argv) {
 
   pgn::StreamParser parser(file_stream);
   parser.readGames(*vis);
+
+  for(auto el : vis->moves()) {
+    fmt::print("{}\n", el);
+  }
 }
