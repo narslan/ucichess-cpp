@@ -260,10 +260,10 @@ namespace ucichess {
    * Extract the information from an info line returned
    * by the engine.
    */
-  auto extractInfo(std::string& info, std::vector<std::string>& infoTokens) -> std::expected<Evaluation, extract_info_parse_error> {
+  void extractInfo(std::string& info, std::vector<std::string>& infoTokens) {
 
     if("info" != infoTokens[0]) {
-       return std::unexpected(extract_info_parse_error::invalid_input);
+      //return std::unexpected(extract_info_parse_error::invalid_input);
     };
 
     
@@ -281,11 +281,11 @@ namespace ucichess {
         
         auto depth =  *it2;
         Evaluation m {score,depth};
-        return m;
+        //return m;
         
       }
     }
-    return std::unexpected(extract_info_parse_error::info_null);
+    //return std::unexpected(extract_info_parse_error::info_null);
     
   }
 
@@ -301,7 +301,7 @@ namespace ucichess {
       tokenise(reply, tokens);
       std::string tokenType = tokens[0];
       if(!eof && tokenType == "info") {
-        extractInfo(reply, tokens);
+        // extractInfo(reply, tokens);
       }
       else if(!eof && tokenType == "bestmove") {
         bestMoveFound = true;
@@ -316,17 +316,18 @@ namespace ucichess {
     std::vector<std::string> tokens;
     bool bestMoveFound = false;
     bool eof = false;
-
     do {
 
       reply = getResponse(eof);
 
       tokens.clear();
       tokenise(reply, tokens);
+
+      //      fmt::print("{}",reply);
       std::string tokenType = tokens[0];
       if(!eof && reply.size() > 13) {
         if(tokenType == "info") {
-          extractInfo(reply, tokens);
+          //extractInfo(reply, tokens);
         }
         else if(tokenType == "bestmove") {
           bestmove = tokens[1];
