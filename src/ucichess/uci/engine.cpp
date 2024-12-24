@@ -1,13 +1,17 @@
 #include "engine.hpp"
 #include "../error/error.hpp"
 
+#include <algorithm>
 #include <cstring>
 #include <fcntl.h>
 
+#include <fmt/core.h>
 #include <sstream>
 #include <string>
 #include <sys/types.h>
 #include <vector>
+#include <expected>
+        
 
 using namespace std::string_literals;
 
@@ -179,12 +183,7 @@ namespace ucichess {
             if(tokens[0] == "id" && tokens[1] == "name") {
               m_id.first = tokens.at(2);
               m_id.second = tokens.at(3);
-              // fmt::print("id: {}\n", line);
             }
-            //if(tokens[0] == "option") {
-            //no op
-            // fmt::print("op: {}\n", line);
-            //}
           }
         }
       }
@@ -200,9 +199,7 @@ namespace ucichess {
     if(waitForResponse("readyok")) {
       return true;
     }
-    else {
-      return false;
-    }
+    return false;
   }
 
   /*
@@ -252,29 +249,45 @@ namespace ucichess {
       }
     }
   }
-
+  
+  enum class extract_info_parse_error
+    {
+      invalid_input,
+      info_null
+    };
+  
   /*
- * Extract the information from an info line returned
- * by the engine.
- */
-  void extractInfo(std::string& info, std::vector<std::string> infoTokens) {
+   * Extract the information from an info line returned
+   * by the engine.
+   */
+  auto extractInfo(std::string& info, std::vector<std::string>& infoTokens) -> std::expected<Evaluation, extract_info_parse_error> {
 
     if("info" != infoTokens[0]) {
-      throw std::runtime_error("tokens doesnt have info");
+       return std::unexpected(extract_info_parse_error::invalid_input);
+      
     };
+
+    
+    
     if((info.find("multipv ") != std::string::npos) || (info.find("nodes ") != std::string::npos)) {
       if((info.find("cp ") != std::string::npos)) {
 
-        int numTokens = infoTokens.size();
-        int t = 1;
-        while(t < numTokens && infoTokens[t] != "depth") {
-          t++;
-        }
-        if(t < numTokens) {
-          int depth = std::stoi(infoTokens[t + 1]);
-        }
+        auto it = std::find(infoTokens.begin(), infoTokens.end(), "cp");
+        *it++;
+        
+        auto score =  *it;
+
+        auto it2 = std::find(infoTokens.begin(), infoTokens.end(), "depth");
+        *it++;
+        
+        auto depth =  *it2;
+        Evaluation m {score,depth};
+        return m;
+        
       }
     }
+    return std::unexpected(extract_info_parse_error::info_null);
+    
   }
 
   void ChessEngine::obtainEvaluations(void) {

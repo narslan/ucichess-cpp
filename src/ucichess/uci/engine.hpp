@@ -11,6 +11,11 @@ namespace ucichess {
   using f = ux::File;
   using p = ux::Process;
 
+  struct Evaluation {
+    std::string score; 
+    std::string depth; 
+  };
+  
   class ChessEngine {
     public:
     // Constructors && public members

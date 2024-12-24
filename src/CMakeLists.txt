@@ -17,7 +17,7 @@ add_library(${project_name}-engine
             ucichess/uci/engine.hpp
                        )
 set_target_properties(${project_name}-engine PROPERTIES
-            CXX_STANDARD 20
+            CXX_STANDARD 23
             CXX_EXTENSIONS OFF
             CXX_STANDARD_REQUIRED ON
 )
@@ -41,7 +41,7 @@ add_library(${project_name}-pgn2sqlite
             ucichess/pgn/sqlite.hpp
             )
 set_target_properties(${project_name}-pgn2sqlite PROPERTIES
-            CXX_STANDARD 20
+            CXX_STANDARD 23
             CXX_EXTENSIONS OFF
             CXX_STANDARD_REQUIRED ON
 )
