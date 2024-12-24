@@ -264,7 +264,6 @@ namespace ucichess {
 
     if("info" != infoTokens[0]) {
        return std::unexpected(extract_info_parse_error::invalid_input);
-      
     };
 
     
