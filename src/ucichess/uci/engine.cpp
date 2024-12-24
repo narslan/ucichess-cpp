@@ -8,16 +8,15 @@
 #include <fmt/core.h>
 #include <sstream>
 #include <string>
-#include <sys/types.h>
+#include <tuple>
 #include <vector>
-#include <expected>
-        
 
 using namespace std::string_literals;
 
 namespace ucichess {
   // split_s is the core machinery. It split s at splitPoint, and returns a vector.
-  std::vector<std::string> split_s(std::string const& s, char delimeter) {
+  std::vector<std::string> split_s(std::string const& s, char delimeter)
+  {
     std::vector<std::string> elements;
     std::stringstream string_stream(s);
     std::string item;
@@ -28,7 +27,8 @@ namespace ucichess {
   }
 
   ChessEngine::ChessEngine(std::string const& path)
-      : m_path{path} {
+      : m_path{path}
+  {
     ux::File parentToChild1;
     ux::File parentToChild2;
     ux::File childToParent1;
@@ -64,11 +64,13 @@ namespace ucichess {
     }
   };
 
-  p ChessEngine::wait() {
+  p ChessEngine::wait()
+  {
     return p::wait(m_child_process);
   }
 
-  std::pair<std::string, std::string> ChessEngine::id() {
+  std::pair<std::string, std::string> ChessEngine::id()
+  {
     return m_id;
   }
 
@@ -76,7 +78,8 @@ namespace ucichess {
  * Wait for the given response from the engine.
  * Return true on success or false on failure (EOF).
  */
-  bool ChessEngine::waitForResponse(const char* str) {
+  bool ChessEngine::waitForResponse(const char* str)
+  {
     bool eof = false;
     std::string response;
     do {
@@ -89,7 +92,8 @@ namespace ucichess {
  * Read and return a single line of response from the engine.
  * Set eof if the end of file is reached.
  */
-  std::string ChessEngine::getResponse(bool& eof) {
+  std::string ChessEngine::getResponse(bool& eof)
+  {
     const int MAXBUFF = 100;
     // Since the reads are not guaranteed to be line-based, buffer retains
     // text read but not returned on a previous call.
@@ -151,21 +155,25 @@ namespace ucichess {
     return result;
   }
 
-  void ChessEngine::quit() {
+  void ChessEngine::quit()
+  {
     send("quit"s);
   }
 
-  void ChessEngine::isready() {
+  void ChessEngine::isready()
+  {
     send("isread");
   }
 
-  void ChessEngine::send(std::string const& str) {
+  void ChessEngine::send(std::string const& str)
+  {
 
     fprintf(toEngine, "%s\n", str.c_str());
     fflush(toEngine);
   }
 
-  void ChessEngine::getOptions() {
+  void ChessEngine::getOptions()
+  {
     // Get the identity.
     send("uci");
     bool eof = false;
@@ -193,7 +201,8 @@ namespace ucichess {
   /*
  * Check that the engine is ready.
  */
-  bool ChessEngine::checkIsReady() {
+  bool ChessEngine::checkIsReady()
+  {
     send("isready");
 
     if(waitForResponse("readyok")) {
@@ -205,18 +214,21 @@ namespace ucichess {
   /*
  * Send ucinewgame if a new game happens.
  */
-  bool ChessEngine::newGame() {
+  bool ChessEngine::newGame()
+  {
     send("ucinewgame");
     return checkIsReady();
   }
 
-  void ChessEngine::go(int searchDepth) {
+  void ChessEngine::go(int searchDepth)
+  {
     std::stringstream ss;
     ss << "go depth " << searchDepth;
     send(ss.str());
   }
 
-  void ChessEngine::setPosition(const std::string& fen, const std::string& moves) {
+  void ChessEngine::setPosition(const std::string& fen, const std::string& moves)
+  {
     std::stringstream ss;
 
     if(fen == "") {
@@ -237,109 +249,71 @@ namespace ucichess {
 
   /*
  * Tokenise text into tokens.
- * tokens is not cleared by this function.
+ * 
  */
-  void tokenise(std::string& text, std::vector<std::string>& tokens) {
+  std::vector<std::string> tokenise(std::string& text)
+  {
+
+    std::vector<std::string> tokens;
     std::stringstream ss(text);
     std::string token;
-    // printf("token: %s\n", token.c_str());
+
     while(getline(ss, token, ' ')) {
       if(token != "") {
         tokens.push_back(token);
       }
     }
+    return tokens;
   }
-  
-  enum class extract_info_parse_error
-    {
-      invalid_input,
-      info_null
-    };
-  
+
   /*
    * Extract the information from an info line returned
    * by the engine.
    */
-  void extractInfo(std::string& info, std::vector<std::string>& infoTokens) {
+  std::tuple<std::string, std::string> extractInfo(std::vector<std::string>& infoTokens)
+  {
 
-    if("info" != infoTokens[0]) {
-      //return std::unexpected(extract_info_parse_error::invalid_input);
-    };
+    auto it = std::find(infoTokens.begin(), infoTokens.end(), "cp");
 
-    
-    
-    if((info.find("multipv ") != std::string::npos) || (info.find("nodes ") != std::string::npos)) {
-      if((info.find("cp ") != std::string::npos)) {
+    *it++;
+    auto score = *it;
 
-        auto it = std::find(infoTokens.begin(), infoTokens.end(), "cp");
-        *it++;
-        
-        auto score =  *it;
+    auto it2 = std::find(infoTokens.begin(), infoTokens.end(), "depth");
+    *it2++;
 
-        auto it2 = std::find(infoTokens.begin(), infoTokens.end(), "depth");
-        *it++;
-        
-        auto depth =  *it2;
-        Evaluation m {score,depth};
-        //return m;
-        
-      }
-    }
-    //return std::unexpected(extract_info_parse_error::info_null);
-    
+    auto depth = *it2;
+    return std::make_tuple(score, depth);
   }
 
-  void ChessEngine::obtainEvaluations(void) {
-    std::string reply;
-    std::vector<std::string> tokens;
-    bool bestMoveFound = false;
-    bool eof = false;
-
-    do {
-      reply = getResponse(eof);
-      tokens.clear();
-      tokenise(reply, tokens);
-      std::string tokenType = tokens[0];
-      if(!eof && tokenType == "info") {
-        // extractInfo(reply, tokens);
-      }
-      else if(!eof && tokenType == "bestmove") {
-        bestMoveFound = true;
-      }
-    } while(!bestMoveFound && !eof);
-  }
-
-  std::string ChessEngine::bestMove(int depth) {
+  std::tuple<std::string, std::string, std::string> ChessEngine::bestMove(int depth)
+  {
     go(depth);
-    std::string reply;
+
     std::string bestmove;
-    std::vector<std::string> tokens;
+    std::vector<std::string> eval;
     bool bestMoveFound = false;
     bool eof = false;
     do {
 
-      reply = getResponse(eof);
+      auto reply = getResponse(eof);
+      auto tokens = tokenise(reply);
 
-      tokens.clear();
-      tokenise(reply, tokens);
-
-      //      fmt::print("{}",reply);
       std::string tokenType = tokens[0];
-      if(!eof && reply.size() > 13) {
-        if(tokenType == "info") {
-          //extractInfo(reply, tokens);
-        }
-        else if(tokenType == "bestmove") {
-          bestmove = tokens[1];
-          bestMoveFound = true;
-        }
+
+      if(tokenType == "info") {
+        eval = tokens;
       }
-      else if(!eof && tokenType == "bestmove") {
+      else if(tokenType == "bestmove") {
         bestmove = tokens[1];
         bestMoveFound = true;
       }
+
     } while(!bestMoveFound && !eof);
-    return bestmove;
+
+    std::string seldepth, score;
+
+    std::tie(seldepth, score) = extractInfo(eval);
+    return std::make_tuple(seldepth, score, bestmove);
   }
 
 } // namespace ucichess
