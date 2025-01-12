@@ -27,7 +27,7 @@ struct FindByName {
 };
 
 int main(int argc, const char** argv) {
-  ucichess::ChessEngine c{"stockfish"};
+  ucichess::ChessEngine c{"patricia"};
 
   std::string in;
 
