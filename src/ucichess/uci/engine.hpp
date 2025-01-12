@@ -19,11 +19,9 @@ namespace ucichess {
   class ChessEngine {
     public:
     // Constructors && public members
-    unsigned int defaultDepth = 10; // default search depth.
 
     ChessEngine(const std::string& path);
-    ~ChessEngine()
-    {
+    ~ChessEngine() {
       quit();
     };
 
@@ -41,15 +39,15 @@ namespace ucichess {
     void setPosition(const std::string& fen, const std::string& moves);
 
     template <typename T>
-    void setOption(const std::string& key, T value)
-    {
+    void setOption(const std::string& key, T value) {
       std::stringstream ss;
       ss << "setoption name " << key << " value " << value;
       send(ss.str());
     };
 
     void getOptions();
-    std::tuple<std::string, std::string, std::string> bestMove(int);
+    //    std::tuple<std::string, std::string, std::string> bestMove(int);
+    std::string bestMove(int);
     void isready();
 
     bool newGame();
