@@ -11,6 +11,7 @@
 #include <tuple>
 #include <vector>
 
+
 using namespace std::string_literals;
 
 namespace ucichess {
@@ -253,14 +254,16 @@ namespace ucichess {
     auto it = std::find(infoTokens.begin(), infoTokens.end(), "cp");
 
     if (it != infoTokens.end()) {
-      score = ++*it;
+      auto n = std::next(it, 1);
+      score = *n;
     }
         
 
-    auto it = std::find(infoTokens.begin(), infoTokens.end(), "depth");
+    auto it2 = std::find(infoTokens.begin(), infoTokens.end(), "depth");
 
-    if (it != infoTokens.end()) {
-      depth = ++*it;
+    if (it2 != infoTokens.end()) {
+      auto n = std::next(it2, 1);
+      depth = *n;
     }
     
     return std::make_tuple(score, depth);
@@ -270,7 +273,7 @@ namespace ucichess {
     go(depth);
 
     std::string bestmove;
-    //std::vector<std::string> eval;
+
     bool bestMoveFound = false;
     bool eof = false;
     do {
@@ -280,10 +283,6 @@ namespace ucichess {
 
       std::string tokenType = tokens[0];
 
-      //    if(tokenType == "info") {
-      //  eval = tokens;
-      // }
-      //else
       if(tokenType == "bestmove") {
         bestmove = tokens[1];
         bestMoveFound = true;
@@ -293,8 +292,6 @@ namespace ucichess {
 
     std::string seldepth, score;
 
-    //std::tie(seldepth, score) = extractInfo(eval);
-    //return std::make_tuple(seldepth, score, bestmove);
     return bestmove;
   }
 
@@ -302,7 +299,7 @@ namespace ucichess {
     go(depth);
     
     std::string bestmove;
-    //std::vector<std::string> eval;
+    std::vector<std::string> eval;
     bool bestMoveFound = false;
     bool eof = false;
     do {
@@ -324,8 +321,8 @@ namespace ucichess {
 
     std::string seldepth, score;
 
-    std::tie(seldepth, score) = extractInfo(eval);
-    return std::make_tuple(seldepth, score, bestmove);
+    std::tie(score, seldepth) = extractInfo(eval);
+    return std::make_tuple(score, seldepth, bestmove);
     
   }
 
