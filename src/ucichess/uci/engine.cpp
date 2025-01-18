@@ -135,10 +135,7 @@ namespace ucichess {
         }
       }
     }
-    if(!eof) {
-      //fmt::print("eooofff\n");
-      //cout << "# [" << result << "]" << endl;
-    }
+
     return result;
   }
 
@@ -250,15 +247,22 @@ namespace ucichess {
    */
   std::tuple<std::string, std::string> extractInfo(std::vector<std::string>& infoTokens) {
 
+    std::string score;
+    std::string depth;
+    
     auto it = std::find(infoTokens.begin(), infoTokens.end(), "cp");
 
-    *it++;
-    auto score = *it;
+    if (it != infoTokens.end()) {
+      score = ++*it;
+    }
+        
 
-    auto it2 = std::find(infoTokens.begin(), infoTokens.end(), "depth");
-    *it2++;
+    auto it = std::find(infoTokens.begin(), infoTokens.end(), "depth");
 
-    auto depth = *it2;
+    if (it != infoTokens.end()) {
+      depth = ++*it;
+    }
+    
     return std::make_tuple(score, depth);
   }
 
@@ -292,6 +296,37 @@ namespace ucichess {
     //std::tie(seldepth, score) = extractInfo(eval);
     //return std::make_tuple(seldepth, score, bestmove);
     return bestmove;
+  }
+
+  std::tuple<std::string, std::string, std::string> ChessEngine::analyze(int depth) {
+    go(depth);
+    
+    std::string bestmove;
+    //std::vector<std::string> eval;
+    bool bestMoveFound = false;
+    bool eof = false;
+    do {
+
+      auto reply = getResponse(eof);
+      auto tokens = tokenise(reply);
+
+      std::string tokenType = tokens[0];
+
+         if(tokenType == "info") {
+           eval = tokens;
+         }
+         else
+           if(tokenType == "bestmove") {
+             bestmove = tokens[1];
+             bestMoveFound = true;
+           }
+    } while(!bestMoveFound && !eof);
+
+    std::string seldepth, score;
+
+    std::tie(seldepth, score) = extractInfo(eval);
+    return std::make_tuple(seldepth, score, bestmove);
+    
   }
 
 } // namespace ucichess

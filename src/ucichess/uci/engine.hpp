@@ -37,7 +37,9 @@ namespace ucichess {
 
     bool checkIsReady();
     void setPosition(const std::string& fen, const std::string& moves);
+    std::tuple<std::string, std::string, std::string> analyze(int depth);
 
+    
     template <typename T>
     void setOption(const std::string& key, T value) {
       std::stringstream ss;
@@ -46,7 +48,6 @@ namespace ucichess {
     };
 
     void getOptions();
-    //    std::tuple<std::string, std::string, std::string> bestMove(int);
     std::string bestMove(int);
     void isready();
 
