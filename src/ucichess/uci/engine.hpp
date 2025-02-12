@@ -12,8 +12,12 @@ namespace ucichess {
   using p = ux::Process;
 
   struct Evaluation {
+    std::string seldepth;
+    std::string multipv;
     std::string score;
-    std::string depth;
+    std::string nodes;
+    std::string time;
+    std::string bestmove;
   };
 
   class ChessEngine {
@@ -38,15 +42,8 @@ namespace ucichess {
     bool checkIsReady();
     void setPosition(const std::string& fen, const std::string& moves);
     std::tuple<std::string, std::string, std::string> analyze(int depth);
-
+    std::vector<Evaluation> analyze_detail(int depth);
     
-    template <typename T>
-    void setOption(const std::string& key, T value) {
-      std::stringstream ss;
-      ss << "setoption name " << key << " value " << value;
-      send(ss.str());
-    };
-
     void getOptions();
     std::string bestMove(int);
     void isready();
@@ -55,12 +52,19 @@ namespace ucichess {
     void quit();
     std::pair<std::string, std::string> id();
 
+    template <typename T>
+    void setOption(const std::string& key, T value) {
+      std::stringstream ss;
+      ss << "setoption name " << key << " value " << value;
+      send(ss.str());
+    };
+    
     private:
-    // private member functions.
 
+    // methods.
     bool init();
 
-    //members.
+    // members.
 
     std::string m_path;
     std::pair<std::string, std::string> m_id;

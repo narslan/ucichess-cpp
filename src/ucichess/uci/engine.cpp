@@ -257,7 +257,6 @@ namespace ucichess {
       auto n = std::next(it, 1);
       score = *n;
     }
-        
 
     auto it2 = std::find(infoTokens.begin(), infoTokens.end(), "depth");
 
@@ -268,6 +267,32 @@ namespace ucichess {
     
     return std::make_tuple(score, depth);
   }
+
+  //info depth 19 seldepth 25 multipv 1 score cp 24 nodes 1088590 nps 1216301 hashfull 394 tbhits 0 time 895 pv e2e4 c7c5 c2c3 g8f6 e4e5 f6d5 g1f3 b8c6 d2d4 c5d4 c3d4 d7d6 f1c4 e7e6 e1g1 d6e5 d4e5 f8e7 d1e2 d8c7
+  Evaluation extractInfoDetail(std::vector<std::string>& infoTokens) {
+
+    auto find_token = [infoTokens](std::string search){
+
+      auto it = std::find(infoTokens.begin(), infoTokens.end(), search);
+      if (it != infoTokens.end()) {
+        auto n = std::next(it, 1);
+        return *n;
+      }
+      return std::string("");
+      
+    };
+    
+    auto seldepth = find_token("seldepth");
+    auto multipv = find_token("multipv");
+    auto score = find_token("cp");
+    auto nodes = find_token("nodes");
+    auto time = find_token("time");
+    auto move = find_token("pv");
+    
+    return Evaluation(seldepth, multipv, score, nodes, time, move);
+  }
+
+  
 
   std::string ChessEngine::bestMove(int depth) {
     go(depth);
@@ -295,7 +320,9 @@ namespace ucichess {
     return bestmove;
   }
 
+  // analyze and return the score and depth of a move.
   std::tuple<std::string, std::string, std::string> ChessEngine::analyze(int depth) {
+
     go(depth);
     
     std::string bestmove;
@@ -309,21 +336,68 @@ namespace ucichess {
 
       std::string tokenType = tokens[0];
 
-         if(tokenType == "info") {
-           eval = tokens;
-         }
-         else
-           if(tokenType == "bestmove") {
-             bestmove = tokens[1];
-             bestMoveFound = true;
-           }
+      if(tokenType == "info") {
+        eval = tokens;
+      }
+      else
+        if(tokenType == "bestmove") {
+          bestmove = tokens[1];
+          bestMoveFound = true;
+        }
     } while(!bestMoveFound && !eof);
-
+    
     std::string seldepth, score;
 
     std::tie(score, seldepth) = extractInfo(eval);
+
     return std::make_tuple(score, seldepth, bestmove);
     
   }
 
+  // analyze position and give out detailed output from chess.
+  std::vector<Evaluation> ChessEngine::analyze_detail(int depth) {
+
+    go(depth);
+    
+    std::string bestmove;
+    std::vector<Evaluation> evaluations;
+    bool bestMoveFound = false;
+    bool eof = false;
+    do {
+
+      auto reply = getResponse(eof);
+      auto tokens = tokenise(reply);
+
+      std::string tokenType = tokens[0];
+
+      // the tokens of evaluation line starts with info.
+      if(tokenType == "info") {
+        for (const auto& e: tokens) {
+          fmt::print("{}\n", e); 
+          }
+        
+
+        // third token is the depth. we discard the other depths.
+        if (depth == std::stoi(tokens[2])) {
+
+          auto e = extractInfoDetail(tokens);
+          evaluations.push_back(e);
+        }
+        
+      }
+      else
+        if(tokenType == "bestmove") {
+          bestmove = tokens[1];
+          bestMoveFound = true;
+        }
+    } while(!bestMoveFound && !eof);
+    
+    std::string seldepth, score;
+
+    return evaluations;
+    
+  }
+
+
+  
 } // namespace ucichess
