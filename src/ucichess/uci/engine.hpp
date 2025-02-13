@@ -41,15 +41,18 @@ namespace ucichess {
 
     bool checkIsReady();
     void setPosition(const std::string& fen, const std::string& moves);
-    std::tuple<std::string, std::string, std::string> analyze(int depth);
-    std::vector<Evaluation> analyze_detail(int depth);
+   
+    std::vector<Evaluation> analyze(int depth);
     
     void getOptions();
-    std::string bestMove(int);
     void isready();
-
     bool newGame();
     void quit();
+    void multipv(int);
+    void threads(int);
+    void hash(int);
+    
+    std::string bestMove(int);
     std::pair<std::string, std::string> id();
 
     template <typename T>
@@ -60,12 +63,10 @@ namespace ucichess {
     };
     
     private:
-
     // methods.
     bool init();
 
     // members.
-
     std::string m_path;
     std::pair<std::string, std::string> m_id;
 

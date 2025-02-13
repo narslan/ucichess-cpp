@@ -148,6 +148,18 @@ namespace ucichess {
     send("isread");
   }
 
+  void ChessEngine::threads(int t) {
+    setOption("Threads", t);
+  }
+
+  void ChessEngine::multipv(int mpv) {
+    setOption("MultiPV", mpv);
+  }
+  
+  void ChessEngine::hash(int h) {
+    setOption("Hash", h);
+  }
+  
   void ChessEngine::send(std::string const& str) {
 
     fprintf(toEngine, "%s\n", str.c_str());
@@ -242,31 +254,6 @@ namespace ucichess {
     return tokens;
   }
 
-  /*
-   * Extract the information from an info line returned
-   * by the engine.
-   */
-  std::tuple<std::string, std::string> extractInfo(std::vector<std::string>& infoTokens) {
-
-    std::string score;
-    std::string depth;
-    
-    auto it = std::find(infoTokens.begin(), infoTokens.end(), "cp");
-
-    if (it != infoTokens.end()) {
-      auto n = std::next(it, 1);
-      score = *n;
-    }
-
-    auto it2 = std::find(infoTokens.begin(), infoTokens.end(), "depth");
-
-    if (it2 != infoTokens.end()) {
-      auto n = std::next(it2, 1);
-      depth = *n;
-    }
-    
-    return std::make_tuple(score, depth);
-  }
 
   //info depth 19 seldepth 25 multipv 1 score cp 24 nodes 1088590 nps 1216301 hashfull 394 tbhits 0 time 895 pv e2e4 c7c5 c2c3 g8f6 e4e5 f6d5 g1f3 b8c6 d2d4 c5d4 c3d4 d7d6 f1c4 e7e6 e1g1 d6e5 d4e5 f8e7 d1e2 d8c7
   Evaluation extractInfoDetail(std::vector<std::string>& infoTokens) {
@@ -292,70 +279,14 @@ namespace ucichess {
     return Evaluation(seldepth, multipv, score, nodes, time, move);
   }
 
-  
-
   std::string ChessEngine::bestMove(int depth) {
-    go(depth);
 
-    std::string bestmove;
-
-    bool bestMoveFound = false;
-    bool eof = false;
-    do {
-
-      auto reply = getResponse(eof);
-      auto tokens = tokenise(reply);
-
-      std::string tokenType = tokens[0];
-
-      if(tokenType == "bestmove") {
-        bestmove = tokens[1];
-        bestMoveFound = true;
-      }
-
-    } while(!bestMoveFound && !eof);
-
-    std::string seldepth, score;
-
-    return bestmove;
+    auto res = analyze(depth);
+    return res[0].bestmove;
   }
 
-  // analyze and return the score and depth of a move.
-  std::tuple<std::string, std::string, std::string> ChessEngine::analyze(int depth) {
-
-    go(depth);
-    
-    std::string bestmove;
-    std::vector<std::string> eval;
-    bool bestMoveFound = false;
-    bool eof = false;
-    do {
-
-      auto reply = getResponse(eof);
-      auto tokens = tokenise(reply);
-
-      std::string tokenType = tokens[0];
-
-      if(tokenType == "info") {
-        eval = tokens;
-      }
-      else
-        if(tokenType == "bestmove") {
-          bestmove = tokens[1];
-          bestMoveFound = true;
-        }
-    } while(!bestMoveFound && !eof);
-    
-    std::string seldepth, score;
-
-    std::tie(score, seldepth) = extractInfo(eval);
-
-    return std::make_tuple(score, seldepth, bestmove);
-    
-  }
-
-  // analyze position and give out detailed output from chess.
-  std::vector<Evaluation> ChessEngine::analyze_detail(int depth) {
+  // analyze position and give out detailed output from chess engine.
+  std::vector<Evaluation> ChessEngine::analyze(int depth) {
 
     go(depth);
     
@@ -370,15 +301,14 @@ namespace ucichess {
 
       std::string firstToken = tokens[0];
       std::string secondToken = tokens[1];
+      std::string depthToken = tokens[2];
       // the tokens of evaluation line starts with info.
       if(firstToken == "info" && secondToken =="depth") {
-
         // third token is the depth. we discard the other depths.
-        if (depth == std::stoi(tokens[2])) {
+        if (depth == std::stoi(depthToken)) {
           auto e = extractInfoDetail(tokens);
           evaluations.push_back(e);
         }
-        
       }
       else
         if(firstToken == "bestmove") {
@@ -386,13 +316,8 @@ namespace ucichess {
           bestMoveFound = true;
         }
     } while(!bestMoveFound && !eof);
-    
-    std::string seldepth, score;
-
+        
     return evaluations;
-    
   }
-
-
   
 } // namespace ucichess
