@@ -40,7 +40,7 @@ namespace ucichess {
     void send(std::string const& str);
 
     bool checkIsReady();
-    void setPosition(const std::string& fen, const std::string& moves);
+    void setPosition(const std::string& fen);
    
     std::vector<Evaluation> analyze(int depth);
     

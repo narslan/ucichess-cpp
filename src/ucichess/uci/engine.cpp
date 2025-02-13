@@ -217,7 +217,7 @@ namespace ucichess {
     send(ss.str());
   }
 
-  void ChessEngine::setPosition(const std::string& fen, const std::string& moves) {
+  void ChessEngine::setPosition(const std::string& fen) {
     std::stringstream ss;
 
     if(fen == "") {
@@ -225,15 +225,9 @@ namespace ucichess {
       send(ss.str());
       return;
     }
+    ss << "position fen " << fen;
+    send(ss.str());
 
-    if(moves.length() == 0) {
-      ss << "position fen " << fen;
-      send(ss.str());
-    }
-    else {
-      ss << "position fen " << fen << " moves " + moves;
-      send(ss.str());
-    }
   }
 
   /*
@@ -279,6 +273,7 @@ namespace ucichess {
     return Evaluation(seldepth, multipv, score, nodes, time, move);
   }
 
+  
   std::string ChessEngine::bestMove(int depth) {
 
     auto res = analyze(depth);
