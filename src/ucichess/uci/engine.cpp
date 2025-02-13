@@ -368,25 +368,20 @@ namespace ucichess {
       auto reply = getResponse(eof);
       auto tokens = tokenise(reply);
 
-      std::string tokenType = tokens[0];
-
+      std::string firstToken = tokens[0];
+      std::string secondToken = tokens[1];
       // the tokens of evaluation line starts with info.
-      if(tokenType == "info") {
-        for (const auto& e: tokens) {
-          fmt::print("{}\n", e); 
-          }
-        
+      if(firstToken == "info" && secondToken =="depth") {
 
         // third token is the depth. we discard the other depths.
         if (depth == std::stoi(tokens[2])) {
-
           auto e = extractInfoDetail(tokens);
           evaluations.push_back(e);
         }
         
       }
       else
-        if(tokenType == "bestmove") {
+        if(firstToken == "bestmove") {
           bestmove = tokens[1];
           bestMoveFound = true;
         }
